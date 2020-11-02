@@ -1,2 +1,34 @@
 %start with a function
-%%
+
+clear all; % clears all workspace variables
+
+participantID = input('Please enter your initials','s'); %asks the subject their name
+
+[w1,rect]=Screen('OpenWindow',0,0);
+[center(1), center(2)]= RectCenter(rect);
+Priority(MaxPriority(w1)); %makes sure the psychtoolbox is prioritized on ur PC
+HideCursor(); %cursor not needed in this visual task, so we hide it
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                   End Of The Script                          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Screen('Close', w1)
+Priority(0);
+Show(Cursor();
