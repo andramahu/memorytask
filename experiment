@@ -10,7 +10,7 @@ Screen('Preference', 'SkipSyncTests', 1); %skips the sync problem error
 Priority(MaxPriority(w1)); %makes sure the psychtoolbox is prioritized on ur PC
 HideCursor(); %cursor not needed in this visual task, so we hide it
 
-KbPressWait; sca; %this waits for a key press and exits the screen
+KbPressWait; sca; %this waits for a key press and exits the screen 
 
 %------------------------------------------------------------
 %                 Putting text on the screen
@@ -24,7 +24,7 @@ WaitSecs(1); %waits on this screen for x amount of seconds before continuing
 
 
 %------------------------------------------------------------
-%                 Creating Stimuli: Words or images?
+%                 Creating Stimuli: images
 %------------------------------------------------------------
 
 
@@ -42,4 +42,4 @@ WaitSecs(1); %waits on this screen for x amount of seconds before continuing
 
 Screen('Close', w1)
 Priority(0);
-Show(Cursor();
+Show(Cursor());
