@@ -1,5 +1,5 @@
 %start with a function
-function FalseMemory(pID,hand)
+function experiment(pID,hand) %jai aucune idee ce que jai fais dans mon sleepdeprivation mode
 %------------------------------------------------------------
 %                 Setting up the experiment
 %------------------------------------------------------------
