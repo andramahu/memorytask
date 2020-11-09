@@ -1,0 +1,23 @@
+function data = Memory_data
+
+disp('Welcome to our experiment!')
+data.pID = input ('Enter your initials','s');
+data.hand = input ('Are you Left or Right Handed? Press L/R:','s');
+   [keyIsDown,secs, pressedKeys] = KbCheck;
+   escapeKey = KbName('ESCAPE');
+lefthanded = KbName('L');
+rightKey = KbName('R');
+ if pressedKeys(escapeKey)
+     ShowCursor;
+     sca;
+     return;  
+ elseif pressedKeys(lefthanded)
+     keyResp  = 'L';
+     respToBeMade = false;
+ elseif pressedKeys(rightKey)
+     keyResp  = 'R';
+     respToBeMade = false;
+ end
+end
+
+

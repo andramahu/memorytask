@@ -1,0 +1,36 @@
+%opens up a psychtoolbox screen window
+Screen('Preference', 'SkipSyncTests', 1); %this skips the verification and sync problems im having, but there may be timing delays. Change 1 with a 0 if you want it to have no timing delay.
+
+screens=Screen('Screens');
+screenNumber=max(screens);
+HideCursor;
+gray=GrayIndex(screenNumber); 
+
+    % Open a double buffered fullscreen window on the stimulation screen
+    % 'screenNumber' and choose/draw a gray background. 'w' is the handle
+    % used to direct all drawing commands to that window - the "Name" of
+    % the window. 'wRect' is a rectangle defining the size of the window.
+    % "help PsychRects" for help
+[w, wRect]=Screen('OpenWindow',screenNumber);
+Screen('TextSize', w, 32);
+
+KbCheck;
+WaitSecs(3);
+GetSecs;
+Screen('CloseAll');
+
+ % Write instruction message for subject, nicely centered in the
+        % middle of the display, in white color. 
+        % character '\n' introduces a line-break:
+        DrawFormattedText(w, 'Welcome to our experiment', 'center', 'center', WhiteIndex(w));
+Screen('Flip', w);
+        
+% Wait for mouse click:
+GetClicks(w);
+                
+% Clear screen to background color (our 'gray' as set at the
+% beginning):
+Screen('Flip', w);
+        
+% Wait a second before starting trial
+WaitSecs(1.000);
