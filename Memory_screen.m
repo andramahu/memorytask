@@ -32,11 +32,12 @@ Screen('CloseAll');
 [xCenter,yCenter] = RectCenter(rect); 
 
 %Set the text size
-Screen('TextSize',w,100) % text size=50
+Screen('TextSize',w,50) % text size=50
 % Sets the text to BOLD
 Screen('TextStyle',w,1) 
 
-DrawFormattedText(w,'Welcome to our experiment! Press spacebar to continue','center','center')
+DrawFormattedText(w,'Welcome to our experiment! Press spacebar to continue','center','center');
+Screen('Flip', w);
 
 % Clear screen to background color 
 Screen('Flip', w);
