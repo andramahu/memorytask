@@ -1,4 +1,3 @@
-
 %function MemoryTask(pID,hand)
 % should we replace "hand" with "run" ? 
 %% IMPORTANT: ctrl+f '?' to see what is not yet finished or what has problems in the code :-)
@@ -306,7 +305,7 @@ end
     %   ListenChar(0). 
 
 %------------------------------------------------------------
-%                 Setting participants: Thara's addition
+%                 Setting participants
 %------------------------------------------------------------
 % NbParticipants = 0;                                                         %On initialise le nombre de participants 
 % ParticipantsNumber = participants(NbParticipants);
