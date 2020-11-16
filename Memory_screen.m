@@ -2,24 +2,24 @@
 %------------------------------------------------------------
 %                 Setting screen up
 %------------------------------------------------------------
-NbParticipants = 0;                                                         %On initialise le nombre de participants 
-ParticipantsNumber = participants(NbParticipants);
-
-%Création d'un tableau d'enregistrement. 
-                                                                            %'Nom', 'Score', etc. correspond à des colonnes. Donc on doit déterminer combien de paires d'images on va avoir dans l'expérience pour déterminer le nombre de colonnes. 
-infos=struct('Name',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{}); 
-                                                                            %Les accolades représentent le stockage.
-                                                                            %J'ai mis 10 scores (si la personne répond bien ou pas), parce que je ne
-                                                                            %savais pas combien de paires d'images on voulait mettre, donc j'en ai mis
-                                                                            %10 mais si on veut en mettre plus ou moins on le modifiera.
-
-%Stockage des noms des participants                                                                             
-                                                                            
-                                                                            %On ne l'a pas mis en fonction, car on ne peut pas appeler une fonction dans une fonction. J'avais besoin du nombre de participants pour demander leurs noms.
-for i = 1:1:ParticipantsNumber                                              %La boucle for va parcourir un à un le nombre de participant. 
-ParticipantsName= input('Enter your initials and month of birth: ', 's');    %On met 's' lorsqu'on entre des lettres, parce qu'on veut que ça reconnaisse la variable comme étant un string.
-infos(i).Name=ParticipantsName;                                             %Pour stocker les noms des participants dans le tableau d'enregistrement, dans la colonne "Nom"
-end
+% NbParticipants = 0;                                                         %On initialise le nombre de participants 
+% ParticipantsNumber = participants(NbParticipants);
+% 
+% %Création d'un tableau d'enregistrement. 
+%                                                                             %'Nom', 'Score', etc. correspond à des colonnes. Donc on doit déterminer combien de paires d'images on va avoir dans l'expérience pour déterminer le nombre de colonnes. 
+% infos=struct('Name',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{}); 
+%                                                                             %Les accolades représentent le stockage.
+%                                                                             %J'ai mis 10 scores (si la personne répond bien ou pas), parce que je ne
+%                                                                             %savais pas combien de paires d'images on voulait mettre, donc j'en ai mis
+%                                                                             %10 mais si on veut en mettre plus ou moins on le modifiera.
+% 
+% %Stockage des noms des participants                                                                             
+%                                                                             
+%                                                                             %On ne l'a pas mis en fonction, car on ne peut pas appeler une fonction dans une fonction. J'avais besoin du nombre de participants pour demander leurs noms.
+% for i = 1:1:ParticipantsNumber                                              %La boucle for va parcourir un à un le nombre de participant. 
+% ParticipantsName= input('Enter your initials and month of birth: ', 's');    %On met 's' lorsqu'on entre des lettres, parce qu'on veut que ça reconnaisse la variable comme étant un string.
+% infos(i).Name=ParticipantsName;                                             %Pour stocker les noms des participants dans le tableau d'enregistrement, dans la colonne "Nom"
+% end
 
 AssertOpenGL
 
@@ -28,6 +28,13 @@ Screen('Preference', 'SkipSyncTests', 1); %this skips the verification and sync 
 
 screens=Screen('Screens');
 screenNumber=max(screens);
+
+[width_in_mm, height_in_mm]=Screen('DisplaySize', screenNumber);
+resolutions = Screen('Resolution', screenNumber);
+pixel_in_mm = width_in_mm/resolutions.width;
+
+hz=Screen('FrameRate', screenNumber);
+
 % Select screen with maximum id for output window:
 screenid = max(Screen('Screens'));
 
@@ -36,7 +43,7 @@ screenid = max(Screen('Screens'));
 HideCursor;
 
 %set up the colors
-gray = [200 200 200 ]; white = [ 255 255 255]; black = [ 0 0 0];
+gray = [200 200 200 ]; white = [ 255 255 255]; black = [ 0 0 0]; green = [0 255 0]; red = [255 0 0];
 bgcolor = gray; textcolor = black;
 
 %dummy check to make sure everything is loaded up and working:
@@ -87,9 +94,23 @@ Screen('Flip', w);
 
 % Clear screen to background color 
 
-DrawFormattedText(w,'Welcome to our experiment! Press any key to continue','center','center')
+DrawFormattedText(w,'Welcome to our experiment! Press any key to continue','center','center');
 Screen('Flip', w);
+WaitSecs(3);
 
+%Determinate the square coordinates so that it's in the middle
+% TopLeftCorner = (1366/2) - 50; % 
+% BottomLeftCorner = (1366/2) + 50;
+% TopRightCorner = (768/2) - 50;
+% BottomRightCorner = (768/2) + 50;
+
+%Gives a coloured square as a feedback
+colSquare = [255 0 0];
+rectSquare = [650, 370, 700, 420];% Rect coordinates : 1st = top left, 2nd = bottom left, 3rd = top right, 4th = bottom right. Gives us a square since the first two coordinates are the same and the last two are the same.
+Screen('FillRect', w, colSquare, rectSquare);
+Screen('Flip', w);
+WaitSecs(3); 
+sca         
 
 %---------------------------------------------------
 %       run through study and test phase
@@ -139,30 +160,30 @@ KbName('UnifyKeyNames');
 Key1=KbName('LeftArrow'); Key2=KbName('RightArrow');
 spaceKey = KbName('space'); escKey = KbName('ESCAPE');
 
-%keyIsDown=0;
-% while 1
-%     [keyIsDown, secs, keyCode] = KbCheck;
-%    if keyIsDown
-%        if keyCode(spaceKey)
-%            break ;
-%        elseif keyCode(escKey)
-%            ShowCursor;
-%            fclose(outfile);
-%            Screen('CloseAll');
-%            return;
-%        end
-%    end
-%end
-% WaitSecs(0.3);
-% 
-% 
-% % Wait for mouse click:
-% GetClicks(w);
-% 
-%              
-%         
-% % Wait a second before starting trial
-% WaitSecs(1.000);
+keyIsDown=0;
+ while 1
+     [keyIsDown, secs, keyCode] = KbCheck;
+    if keyIsDown
+        if keyCode(spaceKey)
+            break ;
+        elseif keyCode(escKey)
+            ShowCursor;
+           fclose(outfile);
+           Screen('CloseAll');
+           return;
+       end
+   end
+end
+WaitSecs(0.3);
+
+
+% Wait for mouse click:
+GetClicks(w);
+
+             
+        
+% Wait a second before starting trial
+WaitSecs(1.000);
 
 DrawFormattedText(w,'Instructions here for Study phase','center','center')
 
