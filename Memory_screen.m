@@ -282,7 +282,7 @@ righthanded = KbName('R');
  end
 end
 
-function [pID,hand] = MemoryTask(data)
+function [pID,hand] = MemoryTask(data) %maybe we could change hand with trial run
 
 pID = data.pID;
 hand = data.hand;
