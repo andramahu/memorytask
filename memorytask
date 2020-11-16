@@ -1,4 +1,3 @@
-
 %function MemoryTask(pID,hand)
 % should we replace "hand" with "run" ? 
 %% IMPORTANT: ctrl+f '?' to see what is not yet finished or what has problems in the code :-)
@@ -47,7 +46,6 @@ grey = [200 200 200 ];
 white = [ 255 255 255]; 
 black = [ 0 0 0];
 bgcolor = grey; textcolor = black;
-green = [0 255 0]; red = [255 0 0];
 
 % dummy check to make sure everything is loaded up and working:
 KbCheck;
@@ -304,26 +302,3 @@ end
     %   keypresses to Matlab. If your script should abort and your keyboard is
     %   dead, press CTRL+C to reenable keyboard input -- It is the same as
     %   ListenChar(0). 
-
-%------------------------------------------------------------
-%                 Setting participants: Thara's addition
-%------------------------------------------------------------
-% NbParticipants = 0;                                                         %On initialise le nombre de participants 
-% ParticipantsNumber = participants(NbParticipants);
-% 
-% %Création d'un tableau d'enregistrement. 
-%                                                                             %'Nom', 'Score', etc. correspond à des colonnes. Donc on doit déterminer combien de paires d'images on va avoir dans l'expérience pour déterminer le nombre de colonnes. 
-% infos=struct('Name',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{}); 
-%                                                                             %Les accolades représentent le stockage.
-%                                                                             %J'ai mis 10 scores (si la personne répond bien ou pas), parce que je ne
-%                                                                             %savais pas combien de paires d'images on voulait mettre, donc j'en ai mis
-%                                                                             %10 mais si on veut en mettre plus ou moins on le modifiera.
-% 
-% %Stockage des noms des participants                                                                             
-%                                                                             
-%                                                                             %On ne l'a pas mis en fonction, car on ne peut pas appeler une fonction dans une fonction. J'avais besoin du nombre de participants pour demander leurs noms.
-% for i = 1:1:ParticipantsNumber                                              %La boucle for va parcourir un à un le nombre de participant. 
-% ParticipantsName= input('Enter your initials and month of birth: ', 's');    %On met 's' lorsqu'on entre des lettres, parce qu'on veut que ça reconnaisse la variable comme étant un string.
-% infos(i).Name=ParticipantsName;                                             %Pour stocker les noms des participants dans le tableau d'enregistrement, dans la colonne "Nom"
-% end
-
