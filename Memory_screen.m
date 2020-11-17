@@ -93,7 +93,20 @@ Screen('TextStyle',w,1)
     % Screen('DrawText',w, 'Welcome to our experiment!Press ESC to exit or press space to continue.', center(1)-1000,center(2),textcolor); 
 DrawFormattedText(w,'Welcome to our experiment!Press ESC to exit or press space to continue.','center','center') %works better, puts it at the center of the screen
     Screen('Flip', w);
-    
+ 
+%Gives a coloured square in the center of the screen as a feedback to the
+%participant
+x1 = xCenter - 10;
+y1 = yCenter - 10;
+x2 = xCenter + 10;
+y2 = yCenter + 10;
+colRect = [255 0 0];
+rectRect = [x1 y1 x2 y2];% Rect coordinates : 1st = top left, 2nd = bottom left, 3rd = top right, 4th = bottom right. Gives us a square since the first two coordinates are the same and the last two are the same.
+Screen('FillRect', w, colRect, rectRect);
+Screen('Flip', w);
+WaitSecs(3); 
+sca  
+
     keyIsDown=0;
     
     % Get response from subjet: the space works, esc doesnt.?
