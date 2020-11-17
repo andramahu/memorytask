@@ -113,18 +113,6 @@ DrawFormattedText(w,'Welcome to our experiment!Press ESC to exit or press space 
         end
     end
 
-%Gives a coloured square in the center of the screen as a feedback to the
-%participant
-x1 = xCenter - 10;
-y1 = yCenter - 10;
-x2 = xCenter + 10;
-y2 = yCenter + 10;
-colRect = [255 0 0];
-rectRect = [x1 y1 x2 y2];% Rect coordinates : 1st = top left, 2nd = bottom left, 3rd = top right, 4th = bottom right. Gives us a square since the first two coordinates are the same and the last two are the same.
-Screen('FillRect', w, colRect, rectRect);
-Screen('Flip', w);
-WaitSecs(3); 
-sca  
 
 
 %%                  Trials + randomisation [UNFINISHED]
@@ -255,6 +243,19 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
 
             end   
 end % ends the for loop
+
+%Gives a coloured square in the center of the screen as a feedback to the
+%participant
+x1 = xCenter - 10;
+y1 = yCenter - 10;
+x2 = xCenter + 10;
+y2 = yCenter + 10;
+colRect = [255 0 0];
+rectRect = [x1 y1 x2 y2];% Rect coordinates : 1st = top left, 2nd = bottom left, 3rd = top right, 4th = bottom right. Gives us a square since the first two coordinates are the same and the last two are the same.
+Screen('FillRect', w, colRect, rectRect);
+Screen('Flip', w);
+WaitSecs(3); 
+sca  
 
 %% end of the trial
 
