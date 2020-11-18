@@ -371,23 +371,30 @@ end
 %------------------------------------------------------------
 %                 Setting participants
 %------------------------------------------------------------
-% NbParticipants = 0;                                                         %On initialise le nombre de participants 
-% ParticipantsNumber = participants(NbParticipants);
-% 
-% %Création d'un tableau d'enregistrement. 
-%                                                                             %'Nom', 'Score', etc. correspond à des colonnes. Donc on doit déterminer combien de paires d'images on va avoir dans l'expérience pour déterminer le nombre de colonnes. 
-% infos=struct('Name',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{}); 
-%                                                                             %Les accolades représentent le stockage.
-%                                                                             %J'ai mis 10 scores (si la personne répond bien ou pas), parce que je ne
-%                                                                             %savais pas combien de paires d'images on voulait mettre, donc j'en ai mis
-%                                                                             %10 mais si on veut en mettre plus ou moins on le modifiera.
-% 
-% %Stockage des noms des participants                                                                             
-%                                                                             
-%                                                                             %On ne l'a pas mis en fonction, car on ne peut pas appeler une fonction dans une fonction. J'avais besoin du nombre de participants pour demander leurs noms.
-% for i = 1:1:ParticipantsNumber                                              %La boucle for va parcourir un à un le nombre de participant. 
-% ParticipantsName= input('Enter your initials and month of birth: ', 's');    %On met 's' lorsqu'on entre des lettres, parce qu'on veut que ça reconnaisse la variable comme étant un string.
-% infos(i).Name=ParticipantsName;                                             %Pour stocker les noms des participants dans le tableau d'enregistrement, dans la colonne "Nom"
-% end
+%%Array to keep the participants' informations (names, answers and reaction time).
 
+%Creating an array to stock the participants' informations (name, response to each image and reaction time)
+%{} : represent the stocking of the information         
+
+data=struct('ID',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{}); 
+
+
+%Asking the participant to enter his initials and birth month
+
+
+participantNumber = input('Enter the number that was given to you: ');
+
+while participantNumber < 1                                             %Need to find a way ask "Enter a valid number" if the participant enters a number that has already been assigned.
+    participantNumber = input('Enter a valid number: ');
+end
+
+for i = participantNumber
+    participantID = input('Please enter your initials and birth month : ','s');
+    data(i).ID = participantID;
+end
+
+%PROBLEM : everytime we run the code again after an attempt, the last participant's informations
+%get earased (ex: the first participant's informations are assigned, but
+%when the second participant enters his ID, the row is empty (as if the
+%first participant never registered).
     
