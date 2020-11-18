@@ -303,7 +303,7 @@ while reponseToBeMade == false
  end
 end
 
-RT = secs - secs0; %Gives the reaction time
+RT = secs - secs0; %Gives the reaction time. %Need to check how to stock each reaction time for the appropriate image (since they're gonna be presented in a random order)
 
 
 %% end of the trial
