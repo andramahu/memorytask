@@ -244,18 +244,67 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
             end   
 end % ends the for loop
 
-%Gives a coloured square in the center of the screen as a feedback to the
-%participant
-x1 = xCenter - 10;
+%% Feedback loop
+%Places the coloured feedback square in the middle of the screen. The
+%square's dimensions are 20 by 20.
+x1 = xCenter - 10; 
 y1 = yCenter - 10;
 x2 = xCenter + 10;
 y2 = yCenter + 10;
-colRect = [255 0 0];
-rectRect = [x1 y1 x2 y2];% Rect coordinates : 1st = top left, 2nd = bottom left, 3rd = top right, 4th = bottom right. Gives us a square since the first two coordinates are the same and the last two are the same.
-Screen('FillRect', w, colRect, rectRect);
-Screen('Flip', w);
-WaitSecs(3); 
-sca  
+colRectFalse = [255 0 0]; %If the person answers falsy, it will show a red square
+colRectTrue = [0 255 0]; %If the person answers right, it will show a green square
+rectRect = [x1 y1 x2 y2];
+
+oldresp=KbName('d'); % "old" response via key 'd'
+newresp=KbName('k'); % "new" response via key 'k'
+
+secs0 = GetSecs; %The stopwatch for the reaction time starts 
+
+reponseToBeMade = true;
+
+%If the image in the second phase has already been presented in the first
+while reponseToBeMade == true
+  [keyIsDown,secs,pressedKeys] = KbCheck;
+ if pressedKeys(oldresp) %The participant says that he has seen the image already, which is true.
+     keyResp = 'd';
+     responseToBeMade = true; 
+     Screen('FillRect', w, colRectTrue, rectRect);
+     Screen('Flip', w);
+     WaitSecs(3); 
+     sca  
+ elseif pressedKeys(newresp) %The participant says that he hasn't seen the image already, which is false.
+     keyResp = 'k';
+     responseToBeMade = false;
+     Screen('FillRect', w, colRectFalse, rectRect);
+     Screen('Flip', w);
+     WaitSecs(3); 
+     sca 
+ end
+end
+
+
+%When the image in the second phase was not presented in the first phase
+while reponseToBeMade == false
+  [keyIsDown,secs,pressedKeys] = KbCheck;
+ if pressedKeys(oldresp) %The participant says that he saw the image in the first phase when in reality, the image was not presented.
+     keyResp = 'd';
+     responseToBeMade = false;
+     Screen('FillRect', w, colRectFalse, rectRect);
+     Screen('Flip', w);
+     WaitSecs(3); 
+     sca  
+ elseif pressedKeys(newresp) %The participant says that he didn't see the image in the first phase, which is true
+     keyResp = 'k';
+     responseToBeMade = true;
+     Screen('FillRect', w, colRectTrue, rectRect);
+     Screen('Flip', w);
+     WaitSecs(3); 
+     sca 
+ end
+end
+
+RT = secs - secs0; %Gives the reaction time
+
 
 %% end of the trial
 
