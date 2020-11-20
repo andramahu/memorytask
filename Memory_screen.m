@@ -50,16 +50,15 @@ bgcolor = grey; textcolor = black;
 green = [0 255 0]; red = [255 0 0];
 
 % dummy check to make sure everything is loaded up and working:
-KbCheck;
+KbCheck; %USEFUL TO CLEAN THE KEYBOARD BUFFER
 WaitSecs(3);
 GetSecs;
 Screen('CloseAll');
 
-% Sets priority for script execution to realtime priority:
-        %THIS IS IN COMMENTS BECAUSE IT DOESNT WORK TO RUN THE EXPERIMENT.??*********** ISSUE
-        %TO RESOLVE.
-%priorityLevel=MaxPriority(w);
-%Priority(priorityLevel);
+% set the screen to have maximum priority level
+topPriorityLevel = MaxPriority(w);
+
+
 
 %%                  keyboard parameters
 
@@ -77,6 +76,26 @@ oldresp=KbName('d'); % "old" response via key 'd'
 newresp=KbName('k'); % "new" response via key 'k'
 
 
+%----------------------------------------------------------------------
+%                        Fixation Cross
+%----------------------------------------------------------------------
+
+% Screen Y fraction for fixation cross
+crossFrac = 0.0167;
+
+% Here we set the size of the arms of our fixation cross
+fixCrossDimPix = rect(4) * crossFrac;
+
+% Now we set the coordinates (these are all relative to zero we will let
+% the drawing routine center the cross in the center of our monitor for us)
+xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
+yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
+allCoords = [xCoords; yCoords];
+
+% Set the line width for our fixation cross
+lineWidthPix = 4;
+
+
 %%                  Putting text on the screen [before we begin trials]
 
 
@@ -91,29 +110,9 @@ Screen('TextSize',w,45) % text size can be anything
 % Set the text to BOLD
 Screen('TextStyle',w,1) 
     % Screen('DrawText',w, 'Welcome to our experiment!Press ESC to exit or press space to continue.', center(1)-1000,center(2),textcolor); 
-DrawFormattedText(w,'Welcome to our experiment!Press ESC to exit or press space to continue.','center','center') %works better, puts it at the center of the screen
+DrawFormattedText(w,'Welcome to our experiment!Press any key to continue.','center','center') %works better, puts it at the center of the screen
     Screen('Flip', w);
- 
-
-    keyIsDown=0;
-    
-    % Get response from subjet: the space works, esc doesnt.?
-    while 1
-        [keyIsDown, secs, keyCode] = KbCheck;
-        FlushEvents('keyDown');
-        if keyIsDown
-            if keyCode(spaceKey) %if spacebar is pressed, continues
-                break ;
-            elseif keyCode(escKey) %if ESC is pressed, exits program %%%%%%%ISSUE. ESC DOESNT WORK TO EXIT PROGRAM ?
-                ShowCursor;
-                fclose(outfile);
-                Screen('CloseAll');
-                return;
-            end
-        end
-    end
-
-
+ KbWait;
 
 %%                  Trials + randomisation [UNFINISHED]
 
@@ -230,17 +229,26 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
         [ imgnumber, imgname, imgtype ] = textscan(trialname,'%d %s %d'); % %s is string, in this case its the imgname
         
         % Randomize the order of the list
-        nbTrials=length(imgnumber);        % get number of trials depending on the number of images
-        randomorder=randperm(nbTrials);    % randperm() is a matlab function. you want to randomize nbTrials
+        nTrials=length(imgnumber);        % get number of trials depending on the number of images
+        randomorder=randperm(nTrials);    % randperm() is a matlab function. you want to randomize nbTrials
         imgnumber=imgnumber(randomorder);  % need to randomize each list!
         imgname=imgname(randomorder);      % randomize all images
         imgtype=imgtype(randomorder);      % randomize type of images (old and new)
         
 %% loop through trials
-            for trialCount = 1:nbTrials % instructs computer to go through the info contained in the loop x amount of times (defined by nbTrials)
+            for trialCount = 1:nTrials % instructs computer to go through the info contained in the loop x amount of times (defined by nbTrials)
+% Get this trial's information
+    thisTrialType = condMatShuff(1, trialCount);
+    thisExample = condMatShuff(2, trialCount);
 
-%%%%%%%%%%%%%%%%%%%%%%GOTTA DO THIS PART!!!
-
+    % Define the trial type label
+    if thisTrialType == 1
+        trialTypeLabel = 'study phase';
+    elseif thisTrialType == 2
+        trialTypeLabel = 'test phase';
+    end
+%
+%
             end   
 end % ends the for loop
 
@@ -316,36 +324,37 @@ WaitSecs(endDelay);
 
 %Show Cursor on screen
 ShowCursor;
-
-KbPressWait; sca; % this waits for any keypress to exit 
+%waits for any keypress to exit
+KbPressWait; 
+sca; 
     
-
+Priority(0);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                      Supporting functions here:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % this one asks input and puts it in a table
-function data = Memory_data
-
-disp('Welcome to our experiment!')
-data.pID = input ('Enter your initials along with the number of your birthmonth ','s');
-data.hand = input ('Are you Left or Right Handed? Press L/R:','s');
-KbName('UnifyKeyNames');
-[keyIsDown,secs, pressedKeys] = KbCheck;
-escapeKey = KbName('ESCAPE');
-lefthanded = KbName('L');
-righthanded = KbName('R');
- if pressedKeys(escapeKey)
-     ShowCursor;
-     sca;
-     return;  
- elseif pressedKeys(lefthanded)
-     keyResp  = 'L';
-     respToBeMade = false;
- elseif pressedKeys(righthanded)
-     keyResp  = 'R';
-     respToBeMade = false;
- end
-end
+% function data = Memory_data
+% 
+% disp('Welcome to our experiment!')
+% data.pID = input ('Enter your initials along with the number of your birthmonth ','s');
+% data.hand = input ('Are you Left or Right Handed? Press L/R:','s');
+% KbName('UnifyKeyNames');
+% [keyIsDown,secs, pressedKeys] = KbCheck;
+% escapeKey = KbName('ESCAPE');
+% lefthanded = KbName('L');
+% righthanded = KbName('R');
+%  if pressedKeys(escapeKey)
+%      ShowCursor;
+%      sca;
+%      return;  
+%  elseif pressedKeys(lefthanded)
+%      keyResp  = 'L';
+%      respToBeMade = false;
+%  elseif pressedKeys(righthanded)
+%      keyResp  = 'R';
+%      respToBeMade = false;
+%  end
+% end
 
 function [pID,hand] = MemoryTask(data) % maybe we could change hand with trial run
 
@@ -375,23 +384,23 @@ end
 
 %Creating an array to stock the participants' informations (name, response to each image and reaction time)
 %{} : represent the stocking of the information         
-
-data=struct('ID',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{}); 
-
-
-%Asking the participant to enter his initials and birth month
-
-
-participantNumber = input('Enter the number that was given to you: ');
-
-while participantNumber < 1                                             %Need to find a way ask "Enter a valid number" if the participant enters a number that has already been assigned.
-    participantNumber = input('Enter a valid number: ');
-end
-
-for i = participantNumber
-    participantID = input('Please enter your initials and birth month : ','s');
-    data(i).ID = participantID;
-end
+% 
+% data=struct('ID',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{}); 
+% 
+% 
+% %Asking the participant to enter his initials and birth month
+% 
+% 
+% participantNumber = input('Enter the number that was given to you: ');
+% 
+% while participantNumber < 1                                             %Need to find a way ask "Enter a valid number" if the participant enters a number that has already been assigned.
+%     participantNumber = input('Enter a valid number: ');
+% end
+% 
+% for i = participantNumber
+%     participantID = input('Please enter your initials and birth month : ','s');
+%     data(i).ID = participantID;
+% end
 
 %PROBLEM : everytime we run the code again after an attempt, the last participant's informations
 %get earased (ex: the first participant's informations are assigned, but
