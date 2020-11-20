@@ -1,26 +1,8 @@
 %function MemoryTask(pID,hand)
-% should we replace "hand" with "run" ? 
+% we should replace "hand" with "run"  
 %% IMPORTANT: ctrl+f '?' to see what is not yet finished or what has problems in the code :-)
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%           Memory Task Experiment           %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Data
-    %data = Memory_data;
-
-% function
-
-    %[pID, hand] = myfunction(data);
-
-% initialize
-
-%settings = Memory_initialize(data); THIS IS INCOMPLETE. dont know if we
-%even need it tbh?
-
-% screen
-    %Memory_screen;
-    
 %%                   Setting screen up [FINISHED]
 
 AssertOpenGL; % Verifies if PTB is based on OpenGL & Screen(), break & error if not
@@ -59,8 +41,9 @@ Screen('CloseAll');
 topPriorityLevel = MaxPriority(w);
 
 
-
-%%                  keyboard parameters
+  %%  PRE-LOAD IMAGES:
+  
+  %%  keyboard parameters
 
 KbName('UnifyKeyNames'); %removes keyboard OS compatibility issues
 Key1=KbName('LeftArrow'); Key2=KbName('RightArrow'); %should we just use numbers like 1 and 2 as keys?
@@ -77,7 +60,7 @@ newresp=KbName('k'); % "new" response via key 'k'
 
 
 %----------------------------------------------------------------------
-%                        Fixation Cross
+%                        Fixation Cross: to be finished
 %----------------------------------------------------------------------
 
 % Screen Y fraction for fixation cross
