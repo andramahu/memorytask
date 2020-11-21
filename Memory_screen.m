@@ -41,8 +41,6 @@ Screen('CloseAll');
 topPriorityLevel = MaxPriority(w);
 
 
-  %%  PRE-LOAD IMAGES:
-  
   %%  keyboard parameters
 
 KbName('UnifyKeyNames'); %removes keyboard OS compatibility issues
@@ -147,10 +145,9 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
             
             % study phase variables
             phasetype='study';
-            duration=2.000; % Duration it presents the image (secs)
+            duration=2.000; % Duration the images will be presented for(secs)
             %trialname=studyfilename; % leave in comments until we finish
-            %the data input filename section (?)
-            message = 'In the study phase,you will be presented images and your task is to memorize them... press Right Arrow when they disappear ...\n... click to begin ...';
+            message = 'In the study phase,you will be presented images and your task is to memorize them...\n Click to begin';
 
         else        % phase==2 test phase
             
@@ -161,8 +158,8 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
             %the data input filename section (?)
             
             % write message to subject
-            str=sprintf('Press _%s_ for OLD and _%s_ for NEW\n',KbName(oldresp),KbName(newresp));
-            message = ['In the test phase, you will be shown images again ...\n your task will be to indicate if it`s an old or new image' str '... click to begin ...'];
+            str=sprintf(' by pressing %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
+            message = ['In the test phase, you will be shown images again ...\n your task will be to indicate if it`s an old or new image' str 'Click to begin'];
 % Get response for TEST PHASE and input it in a data table
 %     while 1
 %         [keyIsDown, secs, keyCode] = KbCheck;
@@ -224,6 +221,9 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
     thisTrialType = condMatShuff(1, trialCount);
     thisExample = condMatShuff(2, trialCount);
 
+            % read stimulus images into the matlab matrix 'imdata':
+            imgfilename=strcat('images/',char(objname(trial))); % assume stimuli images are in subfolder "images"
+            imdata=imread(char(imgfilename));
     % Define the trial type label
     if thisTrialType == 1
         trialTypeLabel = 'study phase';
