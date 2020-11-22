@@ -2,6 +2,19 @@
 % we should replace "hand" with "run"  
 %% IMPORTANT: ctrl+f '?' to see what is not yet finished or what has problems in the code :-)
 
+%%                      To save participants' IDs.
+data=struct('pID',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{},'Answer8',{},'Time8',{},'Answer9',{},'Time9',{},'Answer10',{},'Time10',{},'Answer11',{},'Time11',{},'Answer12',{},'Time12',{},'Answer13',{},'Time13',{},'Answer14',{},'Time14',{},'Answer15',{},'Time15',{},'Answer16',{},'Time16',{},'Answer17',{},'Time17',{},'Answer18',{},'Time18',{},'Answer19',{},'Time19',{},'Answer20',{},'Time20',{},'Answer21',{},'Time21',{},'Answer22',{},'Time22',{},'Answer23',{},'Time23',{},'Answer24',{},'Time24',{},'Answer25',{},'Time25',{}); 
+i = 1;
+%load('Index.mat', 'i'); %Need to put the two loads in comments the first time we run the code (because there is nothing to load the first time) and take the % off after the first time. 
+%load('Results.mat', 'data');
+pID = input('Please enter your initials and birth month : ','s');
+data(i).pID = pID;
+save('Results.mat','data');
+i = i + 1;
+save('Index.mat', 'i');
+
+%delete Index.mat; delete Results.mat : If we want to start the experiment again with new participants.
+
 
 %%                   Setting screen up [FINISHED]
 
@@ -100,9 +113,9 @@ DrawFormattedText(w,'Welcome to our experiment!Press any key to continue.','cent
 
 %%                  Create file name that all the data will saved in
 
-data = struct;
-data.rt = [];                               % Reaction time for each trial
-data.answer = [];                               % Will contain the answer of the participant. 'D' means old and 'K' means new
+%data = struct;
+%data.rt = [];                               % Reaction time for each trial
+%data.answer = [];                               % Will contain the answer of the participant. 'D' means old and 'K' means new
 %
 %
 
