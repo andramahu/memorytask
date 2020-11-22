@@ -58,24 +58,10 @@ newresp=KbName('k'); % "new" response via key 'k'
 
 
 %----------------------------------------------------------------------
-%                        Fixation Cross: to be finished
+%                        Fixation Cross
 %----------------------------------------------------------------------
 
-% Screen Y fraction for fixation cross
-crossFrac = 0.0167;
-
-% Here we set the size of the arms of our fixation cross
-fixCrossDimPix = rect(4) * crossFrac;
-
-% Now we set the coordinates (these are all relative to zero we will let
-% the drawing routine center the cross in the center of our monitor for us)
-xCoords = [-fixCrossDimPix fixCrossDimPix 0 0];
-yCoords = [0 0 -fixCrossDimPix fixCrossDimPix];
-allCoords = [xCoords; yCoords];
-
-% Set the line width for our fixation cross
-lineWidthPix = 4;
-
+% JEAN MET TON CODE ICI
 
 %%                  Putting text on the screen [before we begin trials]
 
@@ -197,7 +183,8 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
                 
         % Clears screen back to grey 
         Screen('Flip', w);
-        
+ % JEAN MET TON CODE ICI: % Draw the Fixation Cross
+ 
         % Wait a second before starting the trial
         WaitSecs(1.000);
         
