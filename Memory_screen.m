@@ -350,30 +350,16 @@ end
 %------------------------------------------------------------
 %                 Setting participants
 %------------------------------------------------------------
-%%Array to keep the participants' informations (names, answers and reaction time).
+%% To save participants' IDs.
+%data=struct('pID',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{},'Answer8',{},'Time8',{},'Answer9',{},'Time9',{},'Answer10',{},'Time10',{},'Answer11',{},'Time11',{},'Answer12',{},'Time12',{},'Answer13',{},'Time13',{},'Answer14',{},'Time14',{},'Answer15',{},'Time15',{},'Answer16',{},'Time16',{},'Answer17',{},'Time17',{},'Answer18',{},'Time18',{},'Answer19',{},'Time19',{},'Answer20',{},'Time20',{},'Answer21',{},'Time21',{},'Answer22',{},'Time22',{},'Answer23',{},'Time23',{},'Answer24',{},'Time24',{},'Answer25',{},'Time25',{}); 
+%i = 1;
+%load('Index.mat', 'i'); %Need to put the two loads in comments the first time we run the code (because there is nothing to load the first time) and take the % off after the first time. 
+%load('Results.mat', 'data');
+%pID = input('Please enter your initials and birth month : ','s');
+%data(i).pID = pID;
+%save('Results.mat','data');
+%i = i + 1;
+%save('Index.mat', 'i');
 
-%Creating an array to stock the participants' informations (name, response to each image and reaction time)
-%{} : represent the stocking of the information         
-% 
-% data=struct('ID',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{}); 
-% 
-% 
-% %Asking the participant to enter his initials and birth month
-% 
-% 
-% participantNumber = input('Enter the number that was given to you: ');
-% 
-% while participantNumber < 1                                             %Need to find a way ask "Enter a valid number" if the participant enters a number that has already been assigned.
-%     participantNumber = input('Enter a valid number: ');
-% end
-% 
-% for i = participantNumber
-%     participantID = input('Please enter your initials and birth month : ','s');
-%     data(i).ID = participantID;
-% end
-
-%PROBLEM : everytime we run the code again after an attempt, the last participant's informations
-%get earased (ex: the first participant's informations are assigned, but
-%when the second participant enters his ID, the row is empty (as if the
-%first participant never registered).
+%delete Index.mat; delete Results.mat : If we want to start the experiment again with new participants.
     
