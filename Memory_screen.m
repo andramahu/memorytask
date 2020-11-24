@@ -168,7 +168,7 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
             
             % study phase variables
                     phasetype='study';
-                    trialname=studyfilename; % leave in comments until we finish
+                 %  trialname=studyfilename; % leave in comments until we finish
                     duration=3.000; % Duration the images will be presented for(secs)
                         % show instruction when it's phase 1
                     instruction = 'Memorize the following images.\n Click to begin';
@@ -184,7 +184,7 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
 
                         % test phase variables
                         phasetype='test';
-                        trialname=testfilename; % leave in comments until we finish
+                     %  trialname=testfilename; % leave in comments until we finish
                         duration=1.000;  %sec
                      
                         % Show this instruction when it's phase 2
