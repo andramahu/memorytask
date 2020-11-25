@@ -2,9 +2,23 @@
 % we should replace "hand" with "run"  
 %% IMPORTANT: ctrl+f '?' to see what is not yet finished or what has problems in the code :-)
 
+%%                      To save participants' IDs.
+data=struct('pID',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{},'Answer8',{},'Time8',{},'Answer9',{},'Time9',{},'Answer10',{},'Time10',{},'Answer11',{},'Time11',{},'Answer12',{},'Time12',{},'Answer13',{},'Time13',{},'Answer14',{},'Time14',{},'Answer15',{},'Time15',{},'Answer16',{},'Time16',{},'Answer17',{},'Time17',{},'Answer18',{},'Time18',{},'Answer19',{},'Time19',{},'Answer20',{},'Time20',{},'Answer21',{},'Time21',{},'Answer22',{},'Time22',{},'Answer23',{},'Time23',{},'Answer24',{},'Time24',{},'Answer25',{},'Time25',{}); 
+i = 1;
+%load('Index.mat', 'i'); %Need to put the two loads in comments the first time we run the code (because there is nothing to load the first time) and take the % off after the first time. 
+%load('Results.mat', 'data');
+pID = input('Please enter your initials and birth month : ','s');
+data(i).pID = pID;
+save('Results.mat','data');
+i = i + 1;
+save('Index.mat', 'i');
 
-%%                   Setting screen up [FINISHED]
+%delete Index.mat; delete Results.mat : If we want to start the experiment again with new participants.
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
+%                               Setting screen up
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 AssertOpenGL; % Verifies if PTB is based on OpenGL & Screen(), break & error if not
 
 % Opens up a psychtoolbox screen window
@@ -16,20 +30,9 @@ screenNumber=max(screens);
 % Selects screen with maximum id for output window:
 screenid = max(Screen('Screens'));
 
-%///////////////////////////////////////////////////////////////
-%////////Open a fullscreen window with grey background////////// 
-%///////////////////////////////////////////////////////////////   
-    %?????   PsychImaging('PrepareConfiguration'); idk what this is for or if needed   %it prepares setup of imaging pipeline for onscreen window
 
 % hide cursor for the beginning of the experiment
 HideCursor;
-
-% Color parameters
-grey = [200 200 200 ]; 
-white = [ 255 255 255]; 
-black = [ 0 0 0];
-bgcolor = grey; textcolor = black;
-green = [0 255 0]; red = [255 0 0];
 
 % dummy check to make sure everything is loaded up and working:
 KbCheck; %USEFUL TO CLEAN THE KEYBOARD BUFFER
@@ -38,8 +41,18 @@ GetSecs;
 Screen('CloseAll');
 
 % set the screen to have maximum priority level
-topPriorityLevel = MaxPriority(w);
+%topPriorityLevel = MaxPriority(w);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
+%                              Preliminary stuff
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+  %% Color parameters
+grey = [200 200 200 ]; 
+white = [ 255 255 255]; 
+black = [ 0 0 0];
+bgcolor = grey; textcolor = black;
+green = [0 255 0]; red = [255 0 0];
 
   %%  keyboard parameters
 
@@ -57,14 +70,69 @@ oldresp=KbName('d'); % "old" response via key 'd'
 newresp=KbName('k'); % "new" response via key 'k'
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
+%                        Initializing data variables
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+data.imgs_path_name = './images';
+data.data_path_name = '.data';
+
+
+ImageFiles = dir(fullfile('./images','*.png')); %prints file names in the folder to command window
+allFilenames = dir('**/*.png');
+
+for k = 1:length(allFilenames)
+    allFilenames = dir('**/*.png'); %GETS INTO IMAGES FOLDER AND SELECTS ALL PNG FILES
+    data.img_names = {allFilenames.name};
+    pngFileName = strcat('',num2str(k),'.png');
+    
+end
+
+
+% for ii = 1:numel(ImageFiles)
+%   fprintf([ImageFiles(ii).name,'\n'])
+% end
+
+% allImages = cell(length(ImageFiles),1); %empty cell that will store all images
+% for i = 1:length(ImageFiles)
+%   allImages{i}= imread(ImageFiles{i});
+% end
+
+
+% cd(data.imgs_path_name)
+% for i=1:41
+% name = sprintf('S%d.png',i); 
+% I{i}=imread(name); 
+% end
+% imshow(I{40}); %use this index to call data
+
+% for s = 1:41
+%     pngFileName= strcat('S',num2str(s), '.png');
+%     if isfile(pngFileName)
+%         imageData = imread(pngFileName);
+%     else
+%         fprintf('File %s does not exist.\n', pngFileName);
+%     end
+% end
+
+
+%data = struct;
+%data.rt = [];                               % Reaction time for each trial
+%data.answer = [];                               % Will contain the answer of the participant. 'D' means old and 'K' means new
+%
+%
+    % constants
+nTrials = 2;
+nImages = 51;
 %----------------------------------------------------------------------
 %                        Fixation Cross
 %----------------------------------------------------------------------
 
 % JEAN MET TON CODE ICI
 
-%%                  Putting text on the screen [before we begin trials]
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
+%                           First Screen: Welcome
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
 
 % Open a window
 [w,rect] = Screen('OpenWindow',screenNumber, bgcolor);
@@ -78,33 +146,32 @@ Screen('TextSize',w,45) % text size can be anything
 Screen('TextStyle',w,1) 
     % Screen('DrawText',w, 'Welcome to our experiment!Press ESC to exit or press space to continue.', center(1)-1000,center(2),textcolor); 
 DrawFormattedText(w,'Welcome to our experiment!Press any key to continue.','center','center') %works better, puts it at the center of the screen
-    Screen('Flip', w);
- KbWait;
-
-%%                  Trials + randomisation [UNFINISHED]
-
-
-    % Reseeds the random-number generator for each experiment
-%rng('state',sum(100*clock));
-
-% nTrials = 6; %number of trials
-% nbNew = 3;   %number of new images 
-% 
-% keyPress = zeros(nTrials,1); %will record if a key is pressed or not on each trial. records 1 if a response is made
-% targetTime = zeros(nTrials,1);
-% reactionTime = zeros(nTrials,1);
-% conditions = [repmat(1,1,nbNew),repmat(2,1,nTrials-nbNew)];
-% rng('default');
-% conditionsrand = conditions(randperm(length(conditions)));
+Screen('Flip', w);
+KbWait;
+Screen('Flip', w);
 
 
-%%                  Create file name that all the data will saved in
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
+%                              Pre-load images
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-data = struct;
-data.rt = [];                               % Reaction time for each trial
-data.answer = [];                               % Will contain the answer of the participant. 'D' means old and 'K' means new
-%
-%
+cd(data.imgs_path_name)
+img_textures = {};
+for i = 1:length(data.img_names)
+        
+        %   Load the image into a matlab matrix:
+        img = imread(data.img_names{i});
+        
+        %   Create the pointer to the image in memory for display on Window
+        tex = Screen('MakeTexture',w,img);
+        
+        %   add the pointer to our image_textures cell array:
+        img_textures{i} = tex;
+end
+    
+cd('..') %go back in our main directory for the experiment
+
+
 
 %%                  Begin trials
 %onsetDelay = 2;                                    % number of seconds before the stimuli are presented
@@ -112,15 +179,21 @@ data.answer = [];                               % Will contain the answer of the
    %   Delay (seconds) before motion stimuli presentation
 %WaitSecs(onsetDelay)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
+%                              Experiment
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%      Instructions for phases (1 and 2)
 Screen('TextSize',w, 20);
 Screen('TextFont',w,'Helvetica');
 Screen('TextStyle', w, 0);
-%Screen('TextColor', w, [255 255 255], [0 0 900 900]); %this is in comments
-%because im getting an error (?)
-%Screen('FillRect',w, [127 127 127]);
+%screen settings for images:
+                        img_x1 = xCenter - 400; 
+                        img_y1 = yCenter - 400;
+                        img_x2 = xCenter + 400;
+                        img_y2 = yCenter + 400;
+                        dest_rect = [img_x1 img_y1 img_x2 img_y2];
 
 
      % display task instructions depending on the phase
@@ -130,96 +203,98 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
     if phase==1 % study phase
             
             % study phase variables
-            phasetype='study';
-            duration=2.000; % Duration the images will be presented for(secs)
-            %trialname=studyfilename; % leave in comments until we finish
-            message = 'In the study phase,you will be presented images and your task is to memorize them...\n Click to begin';
+                    phasetype='study';
+ %                   trialname=studyfilename; % leave in comments until we finish
+                  
+                        % show instruction when it's phase 1
+                    instruction = 'Memorize the following images.\n Click to begin';
+                    Screen('Flip',w);
+                    KbWait;
+                    
+                      for i = 1:1:25 % length(img_textures) is equal to 51. here i put 25 for 25 images
+                      Screen('DrawTexture',w,img_textures{i},[], dest_rect);
+                      WaitSecs(1); % Duration the images will be presented for each(secs)
+                      Screen('Flip',w);
+                      end
 
-        else        % phase==2 test phase
-            
-            % test phase variables
-            phasetype='test';
-            duration=0.500;  %sec
-            %trialname=testfilename; % leave in comments until we finish
-            %the data input filename section (?)
-            
-            % write message to subject
-            str=sprintf(' by pressing %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
-            message = ['In the test phase, you will be shown images again ...\n your task will be to indicate if it`s an old or new image' str 'Click to begin'];
-% Get response for TEST PHASE and input it in a data table
-%     while 1
-%         [keyIsDown, secs, keyCode] = KbCheck;
-%         FlushEvents('keyDown');
-%         if keyIsDown
-%             nKeys = sum(keyCode);
-%             %Screen('Flip', windowPtr);
-%             if nKeys==1                                             % Check if a key was pressed
-%                 if keyCode(oldresp)||keyCode(newresp)                     % Checks if the keyCode of the pressed key corresponds to D or K
-%                     rt = (secs - timeStart);                        % Reaction time
-%                     keypressed = find(keyCode);                     % contains the code of the pressed key. can be either 68 (D) or 75 (K)
-%                     data.answer = [data.answer, keypressed];        % Add keypress to data.answer
-%                     break;
-%                 elseif keyCode(escKey)                              % End the trial if the escape key is pressed
-%                     ShowCursor; 
-%                     Screen('CloseAll'); 
-%                     return
-%                 end
-%             end
-%         end  
-%     end
-%WaitSecs(0.3);
+                else    % test phase
+
+                        % test phase variables
+                        phasetype='test';
+%                        trialname=testfilename; % leave in comments until we finish
+                        duration=0.500;  %sec
+                     
+                        % Show this instruction when it's phase 2
+                        str=sprintf(' by pressing %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
+                        instruction = ['In the test phase, you will be shown images again ...\n your task will be to indicate if it`s an old or new image' str 'Click to begin'];
+        Get response for TEST PHASE and input it in a data table
+            while 1
+                [keyIsDown, secs, keyCode] = KbCheck;
+                FlushEvents('keyDown');
+                if keyIsDown
+                    nKeys = sum(keyCode);
+                    %Screen('Flip', windowPtr);
+                    if nKeys==1                                             % Check if a key was pressed
+                        if keyCode(oldresp)||keyCode(newresp)                     % Checks if the keyCode of the pressed key corresponds to D or K
+                            rt = (secs - timeStart);                        % Reaction time
+                            keypressed = find(keyCode);                     % contains the code of the pressed key. can be either 68 (D) or 75 (K)
+                            data.answer = [data.answer, keypressed];        % Add keypress to data.answer
+                            break;
+                        elseif keyCode(escKey)                              % End the trial if the escape key is pressed
+                            ShowCursor; 
+                            Screen('CloseAll'); 
+                            return
+                        end
+                    end
+                end  
+            end
+        WaitSecs(0.3);
     end   % ends the if loop
         
 % still in the for loop, therefore, this will touch phase 1 and 2:
 
-        % Write instruction message for subject (Centered and in black)
-        DrawFormattedText(w, message, 'center', 'center', textcolor);
+                % Write instruction instruction (Centered and in black)for both
+                % phases instruction instructions
+                DrawFormattedText(w, instruction, 'center', 'center', textcolor);
 
-        % flip screen to show the instruction text
-        Screen('Flip', w);
-        
-        % Wait for mouse click:
-        GetClicks(w);
+                % flip screen to show the instruction text
+                Screen('Flip', w);
+
+                % Wait for mouse click:
+                GetClicks(w);
+
+                % Clears screen back to grey 
+                Screen('Flip', w);
                 
-        % Clears screen back to grey 
-        Screen('Flip', w);
- % JEAN MET TON CODE ICI: % Draw the Fixation Cross
- 
-        % Wait a second before starting the trial
-        WaitSecs(1.000);
-        
-% read list of conditions/stimulus images -- textscan() is a matlab function
-        % imgname    image filename
-        % imgnumber  arbitrary number of images
-        % imgtype    1=old image, 2=new image
-            % for study list, images are coded as "old"
-        [ imgnumber, imgname, imgtype ] = textscan(trialname,'%d %s %d'); % %s is string, in this case its the imgname
-        
-        % Randomize the order of the list
-        nTrials=length(imgnumber);        % get number of trials depending on the number of images
-        randomorder=randperm(nTrials);    % randperm() is a matlab function. you want to randomize nbTrials
-        imgnumber=imgnumber(randomorder);  % need to randomize each list!
-        imgname=imgname(randomorder);      % randomize all images
-        imgtype=imgtype(randomorder);      % randomize type of images (old and new)
-        
-%% loop through trials
-            for trialCount = 1:nTrials % instructs computer to go through the info contained in the loop x amount of times (defined by nbTrials)
-% Get this trial's information
-    thisTrialType = condMatShuff(1, trialCount);
-    thisExample = condMatShuff(2, trialCount);
+         % JEAN MET TON CODE ICI: % Draw the Fixation Cross
 
-            % read stimulus images into the matlab matrix 'imdata':
-            imgfilename=strcat('images/',char(objname(trial))); % assume stimuli images are in subfolder "images"
-            imdata=imread(char(imgfilename));
-    % Define the trial type label
-    if thisTrialType == 1
-        trialTypeLabel = 'study phase';
-    elseif thisTrialType == 2
-        trialTypeLabel = 'test phase';
-    end
-%
-%
-            end   
+                % Wait a second before starting the trial
+                WaitSecs(1.000);
+        
+
+        
+        %% Run through trials
+        nTrials = 2;
+                    for trialCount = 1:nTrials % instructs computer to go through the info contained in the loop x amount of times (defined by nbTrials)
+%         % Get this trial's information
+%             thisTrialType = condMatShuff(1, trialCount);
+%             thisExample = condMatShuff(2, trialCount);
+
+                    % read stimulus images into the matlab matrix 'imdata':
+                    imgfilename=strcat('*.png',char(imgname(trialCount))); % assume stimuli images are in subfolder "images"
+                    imginfo=imread(char(imgfilename));
+                    texture=Screen('MakeTexture', w, imginfo); %make a texture from the images
+                    Screen('DrawTexture', w, texture);
+                    Screen('Flip', w); %show image on screen
+            % Define the trial type label
+            if thisTrialType == 1
+                trialTypeLabel = 'study phase';
+            elseif thisTrialType == 2
+                trialTypeLabel = 'test phase';
+            end
+        %
+        %
+                    end    
 end % ends the for loop
 
 %% Feedback loop
@@ -284,21 +359,26 @@ end
 RT = secs - secs0; %Gives the reaction time. %Need to check how to stock each reaction time for the appropriate image (since they're gonna be presented in a random order)
 
 
-%% end of the trial
-
-% End of the run
-WaitSecs(endDelay);
-
-% Close txt log files
-%fclose(EventTxtLogFile);
-
-%Show Cursor on screen
-ShowCursor;
-%waits for any keypress to exit
-KbPressWait; 
-sca; 
-    
+        %% end of the trial
+% End of experiment screen. We clear the screen once they press a key to
+% exit
+DrawFormattedText(w, 'Experiment Finished \n\n Press Any Key To Exit',...
+    'center', 'center', black);
+Screen('Flip', window);
+KbPressWait; %waits for any keypress to exit 
+sca;
+ShowCursor; %Show Cursor on screen
 Priority(0);
+%         % End of the run
+%         WaitSecs(endDelay);
+% 
+%         % Close txt log files
+%         %fclose(EventTxtLogFile);
+%         KbPressWait;
+% 
+
+
+psychrethrow(psychlasterror); %shows any error messages..useful for debugging
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%                      Supporting functions here:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -326,11 +406,11 @@ Priority(0);
 %  end
 % end
 
-function [pID,hand] = MemoryTask(data) % maybe we could change hand with trial run
+%function [pID,hand] = MemoryTask(data) % probably don't need this anymore (it changed)
 
-pID = data.pID;
-hand = data.hand;
-end
+%pID = data.pID;
+%hand = data.hand;
+
 %% informations a savoir pour notre experience****************
     % if we start at "start" seconds, now we're at "GetSecs" time.
     % difference gives Reaction Time (RT)
@@ -350,30 +430,15 @@ end
 %------------------------------------------------------------
 %                 Setting participants
 %------------------------------------------------------------
-%%Array to keep the participants' informations (names, answers and reaction time).
+%% To save participants' IDs.
+%data=struct('pID',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{},'Answer8',{},'Time8',{},'Answer9',{},'Time9',{},'Answer10',{},'Time10',{},'Answer11',{},'Time11',{},'Answer12',{},'Time12',{},'Answer13',{},'Time13',{},'Answer14',{},'Time14',{},'Answer15',{},'Time15',{},'Answer16',{},'Time16',{},'Answer17',{},'Time17',{},'Answer18',{},'Time18',{},'Answer19',{},'Time19',{},'Answer20',{},'Time20',{},'Answer21',{},'Time21',{},'Answer22',{},'Time22',{},'Answer23',{},'Time23',{},'Answer24',{},'Time24',{},'Answer25',{},'Time25',{}); 
+%i = 1;
+%load('Index.mat', 'i'); %Need to put the two loads in comments the first time we run the code (because there is nothing to load the first time) and take the % off after the first time. 
+%load('Results.mat', 'data');
+%pID = input('Please enter your initials and birth month : ','s');
+%data(i).pID = pID;
+%save('Results.mat','data');
+%i = i + 1;
+%save('Index.mat', 'i');
 
-%Creating an array to stock the participants' informations (name, response to each image and reaction time)
-%{} : represent the stocking of the information         
-% 
-% data=struct('ID',{},'Answer1',{},'Time1',{},'Answer2',{},'Time2',{},'Answer3',{},'Time3',{},'Answer4',{},'Time4',{},'Answer5',{},'Time5',{},'Answer6',{},'Time6',{},'Answer7',{},'Time7',{}); 
-% 
-% 
-% %Asking the participant to enter his initials and birth month
-% 
-% 
-% participantNumber = input('Enter the number that was given to you: ');
-% 
-% while participantNumber < 1                                             %Need to find a way ask "Enter a valid number" if the participant enters a number that has already been assigned.
-%     participantNumber = input('Enter a valid number: ');
-% end
-% 
-% for i = participantNumber
-%     participantID = input('Please enter your initials and birth month : ','s');
-%     data(i).ID = participantID;
-% end
-
-%PROBLEM : everytime we run the code again after an attempt, the last participant's informations
-%get earased (ex: the first participant's informations are assigned, but
-%when the second participant enters his ID, the row is empty (as if the
-%first participant never registered).
-    
+%delete Index.mat; delete Results.mat : If we want to start the experiment again with new participants.
