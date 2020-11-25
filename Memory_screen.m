@@ -30,6 +30,10 @@ screenNumber=max(screens);
 % Selects screen with maximum id for output window:
 screenid = max(Screen('Screens'));
 
+%To have everything fit on different dimensions screen
+rect= Screen(screenNumber, 'Rect'); 
+resolution= Screen('Resolution', screenNumber);
+hz=Screen('FrameRate', screenNumber); %creer une frequence dimage
 
 % hide cursor for the beginning of the experiment
 HideCursor;
