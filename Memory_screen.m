@@ -227,7 +227,7 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
                         % Show this instruction when it's phase 2
                         str=sprintf(' by pressing %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
                         instruction = ['In the test phase, you will be shown images again ...\n your task will be to indicate if it`s an old or new image' str 'Click to begin'];
-        Get response for TEST PHASE and input it in a data table
+%         Get response for TEST PHASE and input it in a data table
             while 1
                 [keyIsDown, secs, keyCode] = KbCheck;
                 FlushEvents('keyDown');
@@ -275,26 +275,26 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
         
         %% Run through trials
         nTrials = 2;
-                    for trialCount = 1:nTrials % instructs computer to go through the info contained in the loop x amount of times (defined by nbTrials)
-%         % Get this trial's information
-%             thisTrialType = condMatShuff(1, trialCount);
-%             thisExample = condMatShuff(2, trialCount);
-
-                    % read stimulus images into the matlab matrix 'imdata':
-                    imgfilename=strcat('*.png',char(imgname(trialCount))); % assume stimuli images are in subfolder "images"
-                    imginfo=imread(char(imgfilename));
-                    texture=Screen('MakeTexture', w, imginfo); %make a texture from the images
-                    Screen('DrawTexture', w, texture);
-                    Screen('Flip', w); %show image on screen
-            % Define the trial type label
-            if thisTrialType == 1
-                trialTypeLabel = 'study phase';
-            elseif thisTrialType == 2
-                trialTypeLabel = 'test phase';
-            end
-        %
-        %
-                    end    
+%                     for trialCount = 1:nTrials % instructs computer to go through the info contained in the loop x amount of times (defined by nbTrials)
+% %         % Get this trial's information
+% %             thisTrialType = condMatShuff(1, trialCount);
+% %             thisExample = condMatShuff(2, trialCount);
+% 
+%                     % read stimulus images into the matlab matrix 'imdata':
+%                     imgfilename=strcat('*.png',char(imgname(trialCount))); % assume stimuli images are in subfolder "images"
+%                     imginfo=imread(char(imgfilename));
+%                     texture=Screen('MakeTexture', w, imginfo); %make a texture from the images
+%                     Screen('DrawTexture', w, texture);
+%                     Screen('Flip', w); %show image on screen
+%             % Define the trial type label
+%             if thisTrialType == 1
+%                 trialTypeLabel = 'study phase';
+%             elseif thisTrialType == 2
+%                 trialTypeLabel = 'test phase';
+%             end
+%         %
+%         %
+%                     end    
 end % ends the for loop
 
 %% Feedback loop
