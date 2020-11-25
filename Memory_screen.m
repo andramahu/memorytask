@@ -87,7 +87,7 @@ for k = 1:length(allFilenames)
     
 end
 
-
+%feelin cute might delete later
 % for ii = 1:numel(ImageFiles)
 %   fprintf([ImageFiles(ii).name,'\n'])
 % end
