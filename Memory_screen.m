@@ -41,7 +41,7 @@ GetSecs;
 Screen('CloseAll');
 
 % set the screen to have maximum priority level
-topPriorityLevel = MaxPriority(w);
+%topPriorityLevel = MaxPriority(w);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
 %                              Preliminary stuff
@@ -76,7 +76,44 @@ newresp=KbName('k'); % "new" response via key 'k'
 data.imgs_path_name = './images';
 data.data_path_name = '.data';
 
-data.img_names = {'S (1).png','S (2).png','S (3).png','S (4).png','S (5).png'};
+
+ImageFiles = dir(fullfile('./images','*.png')); %prints file names in the folder to command window
+allFilenames = dir('**/*.png');
+
+for k = 1:length(allFilenames)
+    allFilenames = dir('**/*.png'); %GETS INTO IMAGES FOLDER AND SELECTS ALL PNG FILES
+    data.img_names = {allFilenames.name};
+    pngFileName = strcat('',num2str(k),'.png');
+    
+end
+
+
+% for ii = 1:numel(ImageFiles)
+%   fprintf([ImageFiles(ii).name,'\n'])
+% end
+
+% allImages = cell(length(ImageFiles),1); %empty cell that will store all images
+% for i = 1:length(ImageFiles)
+%   allImages{i}= imread(ImageFiles{i});
+% end
+
+
+% cd(data.imgs_path_name)
+% for i=1:41
+% name = sprintf('S%d.png',i); 
+% I{i}=imread(name); 
+% end
+% imshow(I{40}); %use this index to call data
+
+% for s = 1:41
+%     pngFileName= strcat('S',num2str(s), '.png');
+%     if isfile(pngFileName)
+%         imageData = imread(pngFileName);
+%     else
+%         fprintf('File %s does not exist.\n', pngFileName);
+%     end
+% end
+
 
 %data = struct;
 %data.rt = [];                               % Reaction time for each trial
@@ -86,7 +123,6 @@ data.img_names = {'S (1).png','S (2).png','S (3).png','S (4).png','S (5).png'};
     % constants
 nTrials = 2;
 nImages = 51;
-
 %----------------------------------------------------------------------
 %                        Fixation Cross
 %----------------------------------------------------------------------
@@ -168,15 +204,16 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
             
             % study phase variables
                     phasetype='study';
-                 %  trialname=studyfilename; % leave in comments until we finish
-                    duration=3.000; % Duration the images will be presented for(secs)
+ %                   trialname=studyfilename; % leave in comments until we finish
+                  
                         % show instruction when it's phase 1
                     instruction = 'Memorize the following images.\n Click to begin';
                     Screen('Flip',w);
                     KbWait;
-                      for i = 1:length(img_textures)
+                    
+                      for i = 1:1:25 % length(img_textures) is equal to 51. here i put 25 for 25 images
                       Screen('DrawTexture',w,img_textures{i},[], dest_rect);
-                      WaitSecs(3);
+                      WaitSecs(1); % Duration the images will be presented for each(secs)
                       Screen('Flip',w);
                       end
 
@@ -184,8 +221,8 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
 
                         % test phase variables
                         phasetype='test';
-                     %  trialname=testfilename; % leave in comments until we finish
-                        duration=1.000;  %sec
+%                        trialname=testfilename; % leave in comments until we finish
+                        duration=0.500;  %sec
                      
                         % Show this instruction when it's phase 2
                         str=sprintf(' by pressing %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
@@ -325,7 +362,7 @@ RT = secs - secs0; %Gives the reaction time. %Need to check how to stock each re
         %% end of the trial
 % End of experiment screen. We clear the screen once they press a key to
 % exit
-DrawFormattedText(window, 'Experiment Finished \n\n Press Any Key To Exit',...
+DrawFormattedText(w, 'Experiment Finished \n\n Press Any Key To Exit',...
     'center', 'center', black);
 Screen('Flip', window);
 KbPressWait; %waits for any keypress to exit 
@@ -405,4 +442,3 @@ psychrethrow(psychlasterror); %shows any error messages..useful for debugging
 %save('Index.mat', 'i');
 
 %delete Index.mat; delete Results.mat : If we want to start the experiment again with new participants.
-    
