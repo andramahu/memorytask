@@ -147,6 +147,19 @@ nImages = 51;
 % get the centre coordinates of your window
 [xCenter,yCenter] = RectCenter(rect); 
 
+%Get the fixation cross to appear between trials (images)
+fixCrossDimension = 20;   % Set the length of the lines (in Pixels) of the fixation cross
+lineWidthDimension = 2;     % Set the line width (in Pixels) for our fixation cross
+CrossX = [-fixCrossDimension fixCrossDimension 0 0];
+CrossY = [0 0 -fixCrossDimension fixCrossDimension];
+allCoords = [CrossX; CrossY];
+% Screen ('DrawLines' , w, allCoords, [lineWidthDimension], [black], [xCenter yCenter]); % Draw the fixCross
+% Screen('Flip',w);
+
+ifi = Screen ( 'GetFlipInterval' , w);
+
+Screen('BlendFunction', w, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+
 cd(data.imgs_path_name)
 img_textures = {};
 for i = 1:length(data.img_names)
