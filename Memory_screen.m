@@ -79,54 +79,33 @@ newresp=KbName('k'); % "new" response via key 'k'
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 data.imgs_path_name = './images';
 data.data_path_name = '.data';
+% -------------info--------------------
+% randomimages = randomizes all 51 images
+% img_phase1 = randomly picks 25 random images from those 51 for phase 1 (per trial)
+% img_old = randomly selects 10 of those 25 seen images from phase 1 for
+% phase 2. These will be our old images!
+%--------------------------------------
+allimages = dir('**/*.png'); % directory of our images
+imgname = {allimages.name}; % puts image names into a cell array
+imgnumber = length(imgname); % counts total number of images 
+randomorder = randperm(imgnumber); %randomize the 51 images numbers
+
+all_img = [1:length(imgname)];
 
 
-ImageFiles = dir(fullfile('./images','*.png')); %prints file names in the folder to command window
-allFilenames = dir('**/*.png');
+% IMAGES FOR PHASE 1
+img_phase1 = randperm(imgnumber,25); % select 25 random images from those 51 
+phase1 = length(img_phase1);
 
-for k = 1:length(allFilenames)
-    allFilenames = dir('**/*.png'); %GETS INTO IMAGES FOLDER AND SELECTS ALL PNG FILES
-    data.img_names = {allFilenames.name};
-    pngFileName = strcat('',num2str(k),'.png');
-    
-end
-
-
-% for ii = 1:numel(ImageFiles)
-%   fprintf([ImageFiles(ii).name,'\n'])
-% end
-
-% allImages = cell(length(ImageFiles),1); %empty cell that will store all images
-% for i = 1:length(ImageFiles)
-%   allImages{i}= imread(ImageFiles{i});
-% end
+% IMAGES FOR PHASE 2
+indexes10 = randperm(length(img_phase1),10); % select 10 random images from those 25 to present in phase 2 as old images
+img_old = img_phase1(indexes10); % selects 10 from img_phase1
+%img_new ~= img_phase1; % BECAUSE WE DON'T WANT ANY OF THOSE 25 SEEN!
+%10 different images from 26 new in total and these are random because img_phase1 is randomized
+img_new = find(~ismember(all_img,img_phase1),10); 
 
 
-% cd(data.imgs_path_name)
-% for i=1:41
-% name = sprintf('S%d.png',i); 
-% I{i}=imread(name); 
-% end
-% imshow(I{40}); %use this index to call data
-
-% for s = 1:41
-%     pngFileName= strcat('S',num2str(s), '.png');
-%     if isfile(pngFileName)
-%         imageData = imread(pngFileName);
-%     else
-%         fprintf('File %s does not exist.\n', pngFileName);
-%     end
-% end
-
-
-%data = struct;
-%data.rt = [];                               % Reaction time for each trial
-%data.answer = [];                               % Will contain the answer of the participant. 'D' means old and 'K' means new
-%
-%
-    % constants
-nTrials = 2;
-nImages = 51;
+img_phase2 = length(img_new)+length(img_old);
 %----------------------------------------------------------------------
 %                        Fixation Cross
 %----------------------------------------------------------------------
