@@ -15,4 +15,4 @@ Accuracy implemented in Phase 2:
 Reaction time implemented in Phase 2:
 - Stopwatch starts when the image is presented.
 - Stopwatch stops when the participant answers by pressing a key.
-- Calculated for all 10 images presented.
+- Calculated for all 20 images presented.
