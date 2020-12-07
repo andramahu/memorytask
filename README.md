@@ -11,3 +11,8 @@ Feedback implemented in Phase 2:
 Accuracy implemented in Phase 2:
 - if participant gets it right, accuracy = 1
 - if participant does not get it right, accuracy = 0
+
+Reaction time implemented in Phase 2:
+-Stopwatch starts when the image is presented.
+-Stopwatch stops when the participant answers by pressing a key.
+-Calculated for all 10 images presented.
