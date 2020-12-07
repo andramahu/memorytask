@@ -36,7 +36,7 @@ HideCursor;
 
 % dummy check to make sure everything is loaded up and working:
 KbCheck; %USEFUL TO CLEAN THE KEYBOARD BUFFER
-WaitSecs(3);
+WaitSecs(0.5);
 GetSecs;
 Screen('CloseAll');
 
@@ -79,6 +79,11 @@ data.data_path_name = '.data';
 
 ImageFiles = dir(fullfile('./images','*.png')); %prints file names in the folder to command window
 allFilenames = dir('**/*.png');
+ds = imageDatastore(ImageFiles); 
+while hasdata(ds) 
+    img = read(ds) ;             % read image from datastore
+    figure, imshow(img);    % creates a new window for each image
+end
 
 for k = 1:length(allFilenames)
     allFilenames = dir('**/*.png'); %GETS INTO IMAGES FOLDER AND SELECTS ALL PNG FILES
@@ -88,9 +93,9 @@ for k = 1:length(allFilenames)
 end
 
 %leave in comments for now
-% for ii = 1:numel(ImageFiles)
-%   fprintf([ImageFiles(ii).name,'\n'])
-% end
+for ii = 1:numel(ImageFiles)
+  fprintf([ImageFiles(ii).name,'\n'])
+end
 
 % allImages = cell(length(ImageFiles),1); %empty cell that will store all images
 % for i = 1:length(ImageFiles)
@@ -157,6 +162,7 @@ Screen('Flip', w);
 
 cd(data.imgs_path_name)
 img_textures = {};
+
 for i = 1:length(data.img_names)
         
         %   Load the image into a matlab matrix:
@@ -198,7 +204,7 @@ Screen('TextStyle', w, 0);
 
      % display task instructions depending on the phase
 for phase=1:2 % 1 is study phase, 2 is the test phase                
-
+                
         % Setup experiment variables depending on the phase
     if phase==1 % study phase
             
@@ -209,12 +215,13 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
                         % show instruction when it's phase 1
                     instruction = 'Memorize the following images.\n Click to begin';
                     Screen('Flip',w);
-                    KbWait;
+                    GetClicks(w); % Wait for mouse click
+                    Screen('Flip',w);
                     
                       for i = 1:1:25 % length(img_textures) is equal to 51. here i put 25 for 25 images
                       Screen('DrawTexture',w,img_textures{i},[], dest_rect);
-                      WaitSecs(1); % Duration the images will be presented for each(secs)
                       Screen('Flip',w);
+                      WaitSecs(1); % Duration the images will be presented for each(secs)
                       end
 
                 else    % test phase
@@ -227,44 +234,43 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
                         % Show this instruction when it's phase 2
                         str=sprintf(' by pressing %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
                         instruction = ['In the test phase, you will be shown images again ...\n your task will be to indicate if it`s an old or new image' str 'Click to begin'];
-%         Get response for TEST PHASE and input it in a data table
-            while 1
-                [keyIsDown, secs, keyCode] = KbCheck;
-                FlushEvents('keyDown');
-                if keyIsDown
-                    nKeys = sum(keyCode);
-                    %Screen('Flip', windowPtr);
-                    if nKeys==1                                             % Check if a key was pressed
-                        if keyCode(oldresp)||keyCode(newresp)                     % Checks if the keyCode of the pressed key corresponds to D or K
-                            rt = (secs - timeStart);                        % Reaction time
-                            keypressed = find(keyCode);                     % contains the code of the pressed key. can be either 68 (D) or 75 (K)
-                            data.answer = [data.answer, keypressed];        % Add keypress to data.answer
-                            break;
-                        elseif keyCode(escKey)                              % End the trial if the escape key is pressed
-                            ShowCursor; 
-                            Screen('CloseAll'); 
-                            return
-                        end
-                    end
-                end  
-            end
+%                     for i = 1:1:10 % length(img_textures) is equal to 51. here i put 25 for 25 images
+%                       Screen('DrawTexture',w,img_textures{i},[], dest_rect);
+%                       WaitSecs(1); % Duration the images will be presented for each(secs)
+%                       Screen('Flip',w);
+%                       end
+                        %         Get response for TEST PHASE and input it in a data table
+                                while 1
+                                    [keyIsDown, secs, keyCode] = KbCheck;
+                                    FlushEvents('keyDown');
+                                    if keyIsDown
+                                        nKeys = sum(keyCode);
+                                        %Screen('Flip', windowPtr);
+                                        if nKeys==1                                             % Check if a key was pressed
+                                            if keyCode(oldresp)||keyCode(newresp)                     % Checks if the keyCode of the pressed key corresponds to D or K
+                                                rt = (secs - timeStart);                        % Reaction time
+                                                keypressed = find(keyCode);                     % contains the code of the pressed key. can be either 68 (D) or 75 (K)
+                                                data.answer = [data.answer, keypressed];        % Add keypress to data.answer
+                                                break;
+                                            elseif keyCode(escKey)                              % End the trial if the escape key is pressed
+                                                ShowCursor; 
+                                                Screen('CloseAll'); 
+                                                return
+                                            end
+                                        end
+                                    end  
+                                end
         WaitSecs(0.3);
     end   % ends the if loop
         
 % still in the for loop, therefore, this will touch phase 1 and 2:
 
-                % Write instruction instruction (Centered and in black)for both
-                % phases instruction instructions
+    % Write instruction instruction (Centered and in black)for both
                 DrawFormattedText(w, instruction, 'center', 'center', textcolor);
+                Screen('Flip', w); % flip screen to show the instruction text
+                GetClicks(w); % Wait for mouse click:
+                Screen('Flip', w); % Clears screen back to grey 
 
-                % flip screen to show the instruction text
-                Screen('Flip', w);
-
-                % Wait for mouse click:
-                GetClicks(w);
-
-                % Clears screen back to grey 
-                Screen('Flip', w);
                 
          % JEAN MET TON CODE ICI: % Draw the Fixation Cross
 
@@ -273,28 +279,7 @@ for phase=1:2 % 1 is study phase, 2 is the test phase
         
 
         
-        %% Run through trials
-        nTrials = 2;
-%                     for trialCount = 1:nTrials % instructs computer to go through the info contained in the loop x amount of times (defined by nbTrials)
-% %         % Get this trial's information
-% %             thisTrialType = condMatShuff(1, trialCount);
-% %             thisExample = condMatShuff(2, trialCount);
-% 
-%                     % read stimulus images into the matlab matrix 'imdata':
-%                     imgfilename=strcat('*.png',char(imgname(trialCount))); % assume stimuli images are in subfolder "images"
-%                     imginfo=imread(char(imgfilename));
-%                     texture=Screen('MakeTexture', w, imginfo); %make a texture from the images
-%                     Screen('DrawTexture', w, texture);
-%                     Screen('Flip', w); %show image on screen
-%             % Define the trial type label
-%             if thisTrialType == 1
-%                 trialTypeLabel = 'study phase';
-%             elseif thisTrialType == 2
-%                 trialTypeLabel = 'test phase';
-%             end
-%         %
-%         %
-%                     end    
+  
 end % ends the for loop
 
 %% Feedback loop
