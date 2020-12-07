@@ -127,11 +127,7 @@ data = struct; % create a structure to store all our variables in
     [xCenter,yCenter] = RectCenter(rect);
     
     %Get the fixation cross to appear between trials (images)
-    fixCrossDimension = 20;
-    lineWidthDimension = 2;
-    CrossX = [-fixCrossDimension fixCrossDimension 0 0];
-    CrossY = [0 0 -fixCrossDimension fixCrossDimension];
-    allCoords = [CrossX; CrossY];
+% thara (5) ici
     
     % Feedback Square
 %
