@@ -141,7 +141,7 @@ data = struct; % create a structure to store all our variables in
     % Set the text to BOLD
     Screen('TextStyle',w,1)
     % Draw text to the screen
-    DrawFormattedText(w,'Welcome to our experiment!Press any key to begin.','center','center', textcolor) %works better, puts it at the center of the screen
+    DrawFormattedText(w,'Welcome to our experiment! Press any key to begin.','center','center', textcolor) %works better, puts it at the center of the screen
     Screen('Flip', w);
     KbWait;
     % dummy calls to GetSecs, WaitSecs, KbCheck to make sure
@@ -174,7 +174,7 @@ data = struct; % create a structure to store all our variables in
             
             % write instruction for test phase
             str=sprintf(' by pressing %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
-            instruction = ['In the test phase, you will be shown images again ...\n your task will be to indicate if it`s an old or new image' str 'Click to begin'];
+            instruction = ['In the test phase, you will be shown images again.\n Your task will be to indicate if the image has already been presented in the study phase (old image) or if it''s a new image' str 'Click to begin'];
             DrawFormattedText(w, instruction, 'center', 'center', textcolor);
             ntrials = 20; % 5 new 5 old
             
