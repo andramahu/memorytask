@@ -50,7 +50,7 @@ grey = [200 200 200 ];
 white = [ 255 255 255];
 black = [ 0 0 0];
 bgcolor = black; textcolor = white;
-% Thara Colors ici
+green = [0 255 0]; red = [255 0 0];
 
 
   %-------------------------  
@@ -112,7 +112,7 @@ data = struct; % create a structure to store all our variables in
  
     [w, rect] = Screen('OpenWindow',screenNumber, bgcolor); % open a window
     
-%   Thara (4) ici
+    ifi = Screen('GetFlipInterval', w);
     
     HideCursor; % Hide the mouse cursor
     
@@ -121,12 +121,20 @@ data = struct; % create a structure to store all our variables in
     [xCenter,yCenter] = RectCenter(rect);
     
     %Get the fixation cross to appear between trials (images)
-% thara (5) ici
+    fixCrossDimension = 20;
+    lineWidthDimension = 2;
+    CrossX = [-fixCrossDimension fixCrossDimension 0 0];
+    CrossY = [0 0 -fixCrossDimension fixCrossDimension];
+    allCoords = [CrossX; CrossY];
     
     % Feedback Square
-%
-%   THARA (1) ICI
-%
+    x1 = xCenter - 40;
+    y1 = yCenter - 40;
+    x2 = xCenter + 40;
+    y2 = yCenter + 40;
+    colRectTrue = green;
+    colRectFalse = red;
+    rectRect = [x1 y1 x2 y2];
     
     % Set the text size
     Screen('TextSize',w,45) % text size can be anything
@@ -202,7 +210,7 @@ data = struct; % create a structure to store all our variables in
             Screen('Flip',w);
             WaitSecs(0.500);
             
-% THARA (2) ifi ICI
+            ifi = Screen ( 'GetFlipInterval' , w);
             
             Screen('BlendFunction', w, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
             else % if phase == 2
@@ -226,9 +234,9 @@ data = struct; % create a structure to store all our variables in
             fullFileName = fullfile('images', imgname{filenumber}); %goes inside the images folder and gets all the images
             fprintf(1, 'now reading images %d\n', imgname{filenumber}) % for debugging purposes in the command window
             imageArray = imread(fullFileName);
-%     THARA (3) ICI
-%  Image resize thingy
-%
+            ResizeImg = imresize(imageArray, 0.2);
+         
+            TextureIndex = Screen('MakeTexture', w, ResizeImg);
             
             % Draw texture image to backbuffer centered in the middle
             Screen('DrawTexture', w, TextureIndex);
