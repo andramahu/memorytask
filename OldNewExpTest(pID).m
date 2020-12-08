@@ -58,17 +58,10 @@ bgcolor = black; textcolor = white;
   %-------------------------
 
 % Define filenames of input files and result file:
-datafilename = strcat('OldNewRecogExp_',num2str(pID),'.dat'); % name of data file to write to
 
-
-% check for existing result file to prevent accidentally overwriting
-% files from a previous subject/session (except for pID numbers > 99):
-if pID<99 && fopen(datafilename, 'rt')~=-1
-    fclose('all');
-    error('Result data file already exists! Choose a different subject number.');
-else
-    outfile = fopen(datafilename,'wt'); % wt: opens file for writing
-end
+pID = input('Enter your initials: ','s');
+datafilename = strcat('OldNew_',pID,'.mat');  % name of data file to write to
+outfile = fopen('xdata.dat','wt'); % results in a nice table at the end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
@@ -94,19 +87,20 @@ phase1 = length(img_phase1);
 % IMAGES FOR PHASE 2
 indexes10 = randperm(length(img_phase1),10); % select 10 random images from those 25 to present in phase 2 as old images
 img_old = img_phase1(indexes10); % selects 10 from img_phase1
+number_old = length(img_old); % need this for the conditions in phase 2
 %img_new ~= img_phase1; % BECAUSE WE DON'T WANT ANY OF THOSE 25 SEEN!
 %10 different images from 26 new in total and these are random because img_phase1 is randomized
 img_new = find(~ismember(all_img,img_phase1),10); 
 
 
-img_phase2 = length(img_new)+length(img_old); %ntrials for phase 2 =20;
+img_p2 = [img_old,img_new]; % put new and old images together for fprintf
 
 data = struct; % create a structure to store all our variables in
     data.accuracy = [];
     data.rt = []; % will contain the reaction time for each trial
     data.response = []; % will contain the answer of each participant . 'd' means old, 'k' means new.
-    data.pID = input('Enter your initials: ','s');
-    data.imgname = [];
+    data.pID = pID;
+
     
     %% Begin experiment
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
@@ -160,7 +154,7 @@ data = struct; % create a structure to store all our variables in
             % define variables for current phase
             phasename='study';
             duration=0.500; % Duration of study image presentation in secs.
-            DrawFormattedText(w, 'Memorize the following images and press space to go to the next.\n Click to begin', 'center', 'center', textcolor);
+            DrawFormattedText(w, 'In this study phase, you will have to memorize the following images.\n Click to begin', 'center', 'center', textcolor);
             ntrials = phase1; %25
             
             
@@ -208,11 +202,11 @@ data = struct; % create a structure to store all our variables in
             Screen('Flip',w);
             WaitSecs(0.500);
             
-% THARA (2) ICI
+% THARA (2) ifi ICI
             
             Screen('BlendFunction', w, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
             else % if phase == 2
-                
+                filenumber = img_p2(trial);
                 % for old images:
                 if conditionsrand(trial) == 1
                     count1 = count1 + 1;
@@ -230,7 +224,7 @@ data = struct; % create a structure to store all our variables in
                 
             end
             fullFileName = fullfile('images', imgname{filenumber}); %goes inside the images folder and gets all the images
-            fprintf(1, 'now reading images %d\n', filenumber) % for debugging purposes
+            fprintf(1, 'now reading images %d\n', imgname{filenumber}) % for debugging purposes in the command window
             imageArray = imread(fullFileName);
 %     THARA (3) ICI
 %  Image resize thingy
@@ -254,14 +248,10 @@ data = struct; % create a structure to store all our variables in
                     end
                 end
             end
-            % Wait 1 ms before checking the keyboard again to prevent
-            % overload of the machine at elevated Priority():
-            WaitSecs(0.001);
             
             Screen('FillRect',w, bgcolor, rect);
             Screen('Flip', w);
             
-            rt=0;
             response=0;
             % Continue to the next when a valid key is pressed
             if ( phase == 2 ) % test phase
@@ -270,13 +260,14 @@ data = struct; % create a structure to store all our variables in
                 while KeyCode(oldresp)==0 && KeyCode(newresp)==0
                     [KeyIsDown, endrtr, KeyCode] = KbCheck;
                 end
-                data.rt(trial) = endrt - startrt;
+                data.rt = endrt - startrt;
                 response(trial) = find(KeyCode==1);
                 data.response = [data.response, response(trial)]; %add the keypress response to data.response
                 fprintf(1, 'You responded with "%s"\n', response(trial))
                 Screen('Flip', w);
                 
                 
+                rt = endrt - startrt;
                 
                 % % %       Accuracy of subject's response and type of image
                 
@@ -292,10 +283,12 @@ data = struct; % create a structure to store all our variables in
                         accuracy=1; %correct, true
                         Screen('FillRect',w, colRectTrue, rectRect); % feedback for correct here
                         Screen('Flip',w);
+                        WaitSecs(0.5); 
                     else % if person answers incorrectly
                         %ac=0; %incorrect, false
                         Screen('FillRect',w, colRectFalse, rectRect); % feedback for incorrect here
                         Screen('Flip',w);
+                        WaitSecs(0.5); 
                     end
                     
                     
@@ -306,11 +299,19 @@ data = struct; % create a structure to store all our variables in
                 save('test.mat', 'trial','data');
                 
                 
-%                 resp=KbName(KeyCode); % get key pressed by subject
-                % Write trial result to file:
-                %             fprintf(outfile,'%i %s %i %s %i %i %i \n', ...
-                %                 pID, phasename, trial, resp,all_img(trial),conditionsrand(trial),imgtype(trial), data.accuracy, data.rt);
-            
+                 resp=KbName(KeyCode); % get key pressed by subject (e.g:instead of 68, we get D. and 75, K.)
+               
+             % Write trial result to file:
+            fprintf(outfile,'%s %i %s %i %s %i %i %i\n', ...
+                phasename, ... % will be test phase
+                trial, ... % 1 to 20
+                resp, ... % d or k
+                img_p2(trial), ... %number of the image (e.g 12)
+                imgname{img_p2(trial)}, ... % name of image at that specific trial in phase 2 (e.g S12.png)
+                imgtype, ... % 1=old  2=new
+                accuracy, ... % 1 = correct 0 = incorrect
+                rt);
+                
             end %if phase==2 loop
             
         end %for trial loop
@@ -318,7 +319,7 @@ data = struct; % create a structure to store all our variables in
     end %for phase 1:2 loop
     % End of experiment screen. We clear the screen once they have made their
     % response
-    
+    WaitSecs(0.5); % wait after last feedback before seeing the exit screen.
     DrawFormattedText(w, 'Experiment Finished \n\n Press Any Key To Exit',...
         'center', 'center', textcolor);
     Screen('Flip', w);
@@ -326,7 +327,8 @@ data = struct; % create a structure to store all our variables in
     sca;
     % End of experiment screen. We clear the screen once they have made their
     % response
-    save(datafilename, 'data');
+    
+    save(datafilename); %save our data structure
     
     return;
 catch
