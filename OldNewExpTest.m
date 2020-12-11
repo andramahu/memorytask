@@ -84,7 +84,7 @@ if overwriting                                                                  
   outfile = fopen(datafilename,'wt');                                                                           % Open file for writing.
 end
 
-fprintf(outfile, 'pID\t phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n');     % Add headers to the table at the end
+fprintf(outfile, 'pID\t phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n');     % Add headers to the table at the end.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -326,11 +326,11 @@ try
                                                                                                                  % Newresp with new image or study phase.
                                                                                                         
                     if ((KeyCode(oldresp)==1 && conditionsrand(trial)==1) || (KeyCode(newresp)==1 && conditionsrand(trial)==2))
-                        accuracy=1;                                                                              % Correct, true.
+                        accuracy=1;                                                                              % If participant answers correctly.
                         Screen('FillRect',w, colRectTrue, rectRect);                                             % Green feedback square for correct answer.
                         Screen('Flip',w);
                         WaitSecs(0.5);
-                    else                                                                                         % If person answers incorrectly.
+                    else                                                                                         % If participant answers incorrectly.
                         Screen('FillRect',w, colRectFalse, rectRect);                                            % Red feedback square for incorrect answer.
                         Screen('Flip',w);
                         WaitSecs(0.5);
