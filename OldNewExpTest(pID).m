@@ -31,6 +31,7 @@ rand('state',sum(100*clock)); % Reseed the random-number generator for each expt
   %-------------------------  
   %   Color parameters
   %-------------------------
+grey = [200 200 200 ];
 white = [ 255 255 255];
 black = [ 0 0 0];
 bgcolor = black; textcolor = white;
