@@ -14,10 +14,10 @@ function OldNewExptest(pID)
 %
 % You will need functions from the Psychtoolbox (http://psychtoolbox.org) to run this function.
 %
-% Thara Boumekla
+% Thara Boumekla, 11/12/2020
 % thara.boumekla@umontreal.ca 
 %
-% Andra Mahu 11/12/2020
+% Andra Mahu, 11/12/2020
 % andra.mihaela.mahu@umontreal.ca
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
