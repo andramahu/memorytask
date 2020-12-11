@@ -6,7 +6,8 @@ function OldNewExptest(pID)
 % STUDY PHASE: Participant will be shown 25 random images and be told to memorize them.
 % TEST  PHASE: Participant will be shown 20 images and have to decide whether the image is old('d') or new('k') with a keypress.
 % 10 will be old images, 10 will be new images
-% Results for that try will be saved on xdata.mat
+% Results for each participant will be saved as OldNew_pID.dat,
+% respectively.
 % Can escape anytime during the second phase by pressing q.
 %
 % Experience gets saved on xdata.mat file inside your folder. You can verify your results there.
@@ -62,9 +63,9 @@ newresp=KbName('k'); % "new" response via key 'k'
 % Define filenames of input files and result file:
 
 pID = input('Enter your initials: ','s');
-datafilename = strcat('OldNew_',pID,'.mat');  % name of data file to write to
-outfile = fopen('xdata.dat','wt'); % Puts results in a nice table at the end
-fprintf(outfile, 'phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n'); % add headers
+datafilename = strcat('OldNew_',pID,'.dat');  % name of data file to write to
+outfile = fopen(datafilename,'wt'); % open outfile and get writing access 
+fprintf(outfile, 'pID\t phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n'); % add headers to the table at the end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                        Initializing data variables
@@ -160,6 +161,7 @@ try
         
         % Setup experiment variables etc. depending on phase:
         if phase==1 % study phase
+            
             phasename='study';
             duration=0.500;
             DrawFormattedText(w, 'In this study phase, you will have to memorize the following images.\n Click to begin', 'center', 'center', textcolor);
@@ -317,7 +319,8 @@ try
                 resp=KbName(KeyCode); % get key pressed by subject (e.g:instead of 68, we get D. and 75, K.)
                 
                 % Write trial result to file:
-                fprintf(outfile,'%s %i %s %i %s %i %i %i\n', ...
+                fprintf(outfile,'%s %s %i %s %i %s %i %i %i\n', ...
+                    pID, ...
                     phasename, ... % will be test phase
                     trial, ... % 1 to 20
                     resp, ... % d or k
