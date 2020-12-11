@@ -32,7 +32,7 @@ Screen('Preference', 'SkipSyncTests', 1);                                       
 
 rand('state',sum(100*clock));                                                                                   % Reseed the random-number generator for each expt.
 
-% initialize KbCheck and variables to make sure they're
+% Initialize KbCheck and variables to make sure they're
 % properly initialized/allocted by Matlab - this to avoid time
 % delays in the critical reaction time measurement
 [KeyIsDown, endrt, KeyCode]=KbCheck;                                                                            % Useful for experiments that actually will be used in a research experiment.
@@ -46,12 +46,12 @@ bgcolor = black; textcolor = white;
 green = [0 255 0]; red = [255 0 0];
 
 %-------------------------
-%   keyboard parameters
+%   Keyboard parameters
 %-------------------------
 
 % Make sure keyboard mapping is the same on all supported operating systems
 KbName('UnifyKeyNames');
-% set up our keys
+% Set up our keys
 escape = KbName('q');
 oldresp=KbName('d');                                                                                            % "old" response via key 'd'.
 newresp=KbName('k');                                                                                            % "new" response via key 'k'.
@@ -72,7 +72,7 @@ fprintf(outfile, 'pID\t phasename\t trial\t resp\t imageNumber\t ImageName\t Ima
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 try
-    % -------------info--------------------
+    % -------------Info--------------------
     % img_phase1 = randomly picks 25 random images from those 51 for phase 1 (per trial)
     % img_old = randomly selects 10 of those 25 seen images from phase 1 for
     % phase 2. These will be our old images!
@@ -222,13 +222,13 @@ try
             else                                                                                                % If phase == 2.
                 filenumber = img_p2(trial);                                                                     % filenumber of images in phase 2 for each trial.
                 
-                % for old images:
+                % For old images:
                 if conditionsrand(trial) == 1
                     count1 = count1 + 1;
                     filenumber = img_old(count1);                                                               % Gives image name by itself (e.g: S1.png).
                     imgtype = 1;
                     
-                    % for new images:
+                % For new images:
                 elseif conditionsrand(trial) == 2
                     count2 = count2 + 1;
                     filenumber = img_new(count2);
