@@ -8,9 +8,9 @@ function OldNewExptest(pID)
 % 10 will be old images, 10 will be new images
 % Results for each participant will be saved as OldNew_pID.dat,
 % respectively.
-% Can escape anytime during the second phase by pressing q.
+% If you wish to escape the experiment, press 'q' during phase 2.
 %
-% Experience gets saved on xdata.mat file inside your folder. You can verify your results there.
+% Results get saved inside the SubjectData folder within a pID folder as OldNew_pID.dat . You can verify your results there.
 %
 % You will need functions from the Psychtoolbox (http://psychtoolbox.org) to run this function.
 %
@@ -60,12 +60,34 @@ newresp=KbName('k');                                                            
 %   File Handling
 %-------------------------
 
-% Define filenames of input files and result file:
+% Create directory and initial data file
+resultsFolder = fullfile('SubjectData', pID);                                                                   % Creates a SubjectData folder to store files.
+if ~exist(resultsFolder,'dir')
+    mkdir(resultsFolder);
+end
 
-pID = input('Enter your initials: ','s');
-datafilename = strcat('OldNew_',pID,'.dat');                                                                    % Name of data file to write to.
-outfile = fopen(datafilename,'wt');                                                                             % Open outfile and get writing access.
-fprintf(outfile, 'pID\t phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n');     % Add headers to the table at the end.
+datafilename = strcat([resultsFolder '/OldNewExp_',pID,'.dat']);
+
+overwriting = true; 
+if exist(datafilename, 'file')
+  % Asks if they want to overwrite their data file.
+  Message = sprintf('Oops!Result file already exists:\n%s\n Do you wish to overwrite it?', datafilename);
+  Dialog = 'File exists';
+  buttonText = questdlg(Message, 'Dialog', 'Yes', 'No', 'Yes');
+  if strcmpi(buttonText, 'No')
+    % User chooses to not overwrite the file:
+    overwriting = false;
+    fprintf('You decided to not overwrite your file. Alright then, keep your secrets.\n');
+  end
+end
+if overwriting
+  % if user wants to overwrite an existing file, or if it doesn't exist yet.
+  delete(datafilename);                                                                                         % if user wants to overwrite an existing file
+  outfile = fopen(datafilename,'wt');                                                                           % open file for writing
+end
+
+fprintf(outfile, 'pID\t phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n');     % add headers to the table at the end
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                        Initializing data variables
