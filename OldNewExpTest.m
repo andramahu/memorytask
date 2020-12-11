@@ -2,13 +2,14 @@ function OldNewExptest(pID)
 
 % Input parameters:
 %
-% pID   run and input your initials
-%
-%
+% pID:   run and input your initials (E.g: AMM, TB...)
 % STUDY PHASE: Participant will be shown 25 random images and be told to memorize them.
 % TEST  PHASE: Participant will be shown 20 images and have to decide whether the image is old('d') or new('k') with a keypress.
 % 10 will be old images, 10 will be new images
 % Results for that try will be saved on xdata.mat
+% Can escape anytime during the second phase by pressing q.
+%
+% Experience gets saved on xdata.mat file inside your folder. You can verify your results there.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
@@ -31,7 +32,6 @@ rand('state',sum(100*clock)); % Reseed the random-number generator for each expt
   %-------------------------  
   %   Color parameters
   %-------------------------
-grey = [200 200 200 ];
 white = [ 255 255 255];
 black = [ 0 0 0];
 bgcolor = black; textcolor = white;
