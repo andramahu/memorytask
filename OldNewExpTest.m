@@ -6,11 +6,9 @@ function OldNewExptest(pID)
 % STUDY PHASE: Participant will be shown 25 random images and be told to memorize them.
 % TEST  PHASE: Participant will be shown 20 images and have to decide whether the image is old('d') or new('k') with a keypress.
 % 10 will be old images, 10 will be new images
-% Results for each participant will be saved as OldNew_pID.dat,
-% respectively.
-% If you wish to escape the experiment, press 'q' during phase 2.
+% If you wish to escape the experiment, press 'q'.
 %
-% Results get saved inside the SubjectData folder within a pID folder as OldNew_pID.dat . You can verify your results there.
+% Results get saved inside the SubjectData folder within a pID folder as OldNewExp_pID.dat . You can verify your results there.
 %
 % You will need functions from the Psychtoolbox (http://psychtoolbox.org) to run this function.
 %
@@ -276,7 +274,13 @@ try
             [VBLTimestamp, startrt]=Screen('Flip', w);
             
             while (GetSecs - startrt)<=duration
-                                                                                                                 % During test phase, subjects can respond before stimulus terminates.
+                 if ( phase == 1 )
+                    [keyIsDown, secs, keyCode] = KbCheck;
+                    if keyCode(escape)
+                        clear all
+                        sca;
+                        return
+                    end                                                                                          % During test phase, subjects can respond before stimulus terminates.
                 if ( phase == 2 )
                     [KeyIsDown, endrt, KeyCode]=KbCheck;
                     if ( KeyCode(oldresp)==1 || KeyCode(newresp)==1 )                                            % If d or k is pressed.
@@ -375,7 +379,6 @@ catch                                                                           
     
     % Do same cleanup as at the end of a regular session...
     Screen('Close',w)
-    ShowCursor;
     fclose('all');
     Priority(0);
     
