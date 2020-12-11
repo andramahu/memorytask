@@ -6,7 +6,7 @@ function OldNewExptest(pID)
 % STUDY PHASE: Participant will be shown 25 random images and be told to memorize them.
 % TEST  PHASE: Participant will be shown 20 images and have to decide whether the image is old('d') or new('k') with a keypress.
 % 10 will be old images, 10 will be new images
-% Results for each participant will be saved as OldNew_pID.dat,
+% Results for each participant will be saved as OldNewExp_pID.dat,
 % respectively.
 % If you wish to escape the experiment, press 'q' during phase 2.
 %
