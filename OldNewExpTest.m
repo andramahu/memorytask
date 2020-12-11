@@ -10,7 +10,14 @@ function OldNewExptest(pID)
 % Can escape anytime during the second phase by pressing q.
 %
 % Experience gets saved on xdata.mat file inside your folder. You can verify your results there.
-
+%
+% You will need functions from the Psychtoolbox (http://psychtoolbox.org) to run this function.
+%
+% Thara Boumekla, 11/12/2020
+% thara.boumekla@umontreal.ca
+%
+%
+%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
 %                              Preliminary parameters
@@ -104,8 +111,6 @@ data = struct; % create a structure to store all our variables in
  
     [w, rect] = Screen('OpenWindow',screenNumber, bgcolor); % Open an on screen window
     
-    ifi = Screen('GetFlipInterval', w); % Query the frame duration
-    
     HideCursor; % Hide the mouse cursor
     
     [xCenter,yCenter] = RectCenter(rect); % get the centre coordinates of your window
@@ -155,18 +160,16 @@ Screen('TextStyle',w,1)
         
         % Setup experiment variables etc. depending on phase:
         if phase==1 % study phase
-            % define variables for current phase
             phasename='study';
-            duration=0.500; % Duration of study image presentation in secs.
+            duration=0.500;
             DrawFormattedText(w, 'In this study phase, you will have to memorize the following images.\n Click to begin', 'center', 'center', textcolor);
             ntrials = phase1; %25
             
             
         else        % test phase
             
-            % define variables
             phasename='test';
-            duration=0.500;  %sec
+            duration=0.500;
             
             % write instruction for test phase
             str=sprintf(' Press %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
@@ -205,7 +208,7 @@ Screen('TextStyle',w,1)
             Screen('Flip',w);
             WaitSecs(0.500);
             
-            ifi = Screen ( 'GetFlipInterval' , w);
+            ifi = Screen ( 'GetFlipInterval' , w); % Query the frame duration
             
             Screen('BlendFunction', w, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');  % Set the blend funciton for the screen
             else % if phase == 2
@@ -220,7 +223,7 @@ Screen('TextStyle',w,1)
                  % for new images:
                 elseif conditionsrand(trial) == 2
                     count2 = count2 + 1;
-                    filenumber = img_new(count2); % gives image name by itself (e.g: S1.png)
+                    filenumber = img_new(count2); 
                     imgtype = 2;
                     
                 end
@@ -245,7 +248,7 @@ Screen('TextStyle',w,1)
             while (GetSecs - startrt)<=duration
                 % during test phase, subjects can respond
                 % before stimulus terminates
-                if ( phase == 2 ) % if test phase
+                if ( phase == 2 )
                     [KeyIsDown, endrt, KeyCode]=KbCheck;
                     if ( KeyCode(oldresp)==1 || KeyCode(newresp)==1 ) %if d or k is pressed
                         break;
@@ -265,7 +268,7 @@ Screen('TextStyle',w,1)
             
             response=0;
             % Continue to the next when a valid key is pressed
-            if ( phase == 2 ) % test phase
+            if ( phase == 2 )
                 startrt = GetSecs;
                 [KeyIsDown, endrt, KeyCode] = KbCheck;
                 while KeyCode(oldresp)==0 && KeyCode(newresp)==0
@@ -292,12 +295,12 @@ Screen('TextStyle',w,1)
                     %newresp with new image or study phase
                     if ((KeyCode(oldresp)==1 && conditionsrand(trial)==1) || (KeyCode(newresp)==1 && conditionsrand(trial)==2))
                         accuracy=1; %correct, true
-                        Screen('FillRect',w, colRectTrue, rectRect); % feedback for correct here
+                        Screen('FillRect',w, colRectTrue, rectRect); % Green feedback square for correct answer
                         Screen('Flip',w);
                         WaitSecs(0.5); 
                     else % if person answers incorrectly
                         %ac=0; %incorrect, false
-                        Screen('FillRect',w, colRectFalse, rectRect); % feedback for incorrect here
+                        Screen('FillRect',w, colRectFalse, rectRect); % Red feedback square for incorrect answer
                         Screen('Flip',w);
                         WaitSecs(0.5); 
                     end
