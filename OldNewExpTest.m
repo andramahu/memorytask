@@ -11,7 +11,9 @@ function OldNewExptest(pID)
 %
 % Experience gets saved on xdata.mat file inside your folder. You can verify your results there.
 %
-% Thara Boumekla 11/12/2020
+% You will need functions from the Psychtoolbox (http://psychtoolbox.org) to run this function.
+%
+% Thara Boumekla, 11/12/2020
 % thara.boumekla@umontreal.ca
 %
 %
