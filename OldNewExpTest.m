@@ -283,7 +283,6 @@ try
                         break;
                     elseif KeyCode(escape) == 1                                                                  % 'q' key quits the experiment during phase 2
                         clear all
-                        close all
                         sca
                         return;
                     end
