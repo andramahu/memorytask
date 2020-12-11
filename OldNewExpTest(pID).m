@@ -23,19 +23,6 @@ Screen('Preference', 'SkipSyncTests', 1); % skip any syncing problems
 
 rand('state',sum(100*clock)); % Reseed the random-number generator for each expt.
 
-
-  %-------------------------  
-  %   keyboard parameters
-  %-------------------------
-% Make sure keyboard mapping is the same on all supported operating systems
-KbName('UnifyKeyNames');
-% set up our keys
-escKey = KbName('q');
-oldresp=KbName('d'); % "old" response via key 'd'
-newresp=KbName('k'); % "new" response via key 'k'
-%KbName('d') = 68
-%KbName('k') = 75
-
 % initialize KbCheck and variables to make sure they're
 % properly initialized/allocted by Matlab - this to avoid time
 % delays in the critical reaction time measurement
@@ -51,13 +38,16 @@ bgcolor = black; textcolor = white;
 green = [0 255 0]; red = [255 0 0];
 
   %-------------------------  
-  %          Text
+  %   keyboard parameters
   %-------------------------
-% Set the text size
-Screen('TextSize',w,45) 
-% Set the text to BOLD
-Screen('TextStyle',w,1)
-    
+% Make sure keyboard mapping is the same on all supported operating systems
+KbName('UnifyKeyNames');
+% set up our keys
+escKey = KbName('q');
+oldresp=KbName('d'); % "old" response via key 'd'
+newresp=KbName('k'); % "new" response via key 'k'
+%KbName('d') = 68
+%KbName('k') = 75
   %-------------------------  
   %   File Handling
   %-------------------------
@@ -67,7 +57,7 @@ Screen('TextStyle',w,1)
 pID = input('Enter your initials: ','s');
 datafilename = strcat('OldNew_',pID,'.mat');  % name of data file to write to
 outfile = fopen('xdata.dat','wt'); % Puts results in a nice table at the end
-
+fprintf(outfile, 'phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n'); % add headers 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
 %                        Initializing data variables
@@ -105,7 +95,6 @@ data = struct; % create a structure to store all our variables in
     data.response = []; % will contain the answer of each participant . 'd' means old, 'k' means new.
     data.pID = pID; % inputs pID in a data structure
     
-    %% Begin experiment
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
 %                               Setting screen up
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -120,6 +109,14 @@ data = struct; % create a structure to store all our variables in
     HideCursor; % Hide the mouse cursor
     
     [xCenter,yCenter] = RectCenter(rect); % get the centre coordinates of your window
+    
+  %-------------------------  
+  %          Text
+  %-------------------------
+% Set the text size
+Screen('TextSize',w,45) 
+% Set the text to BOLD
+Screen('TextStyle',w,1)
     
   %-------------------------  
   %      Fixation cross
@@ -140,7 +137,7 @@ data = struct; % create a structure to store all our variables in
     rectRect = [x1 y1 x2 y2];
 
     % Draw text to the screen
-    DrawFormattedText(w,'Welcome to our experiment! Press any key to begin.','center','center', textcolor) %works better, puts it at the center of the screen
+    DrawFormattedText(w,'Welcome to our experiment! Press any key to begin.','center','center', textcolor) % Introduction message
     Screen('Flip', w); % flip to screen
     KbWait; % wait for keypress
     
@@ -172,10 +169,10 @@ data = struct; % create a structure to store all our variables in
             duration=0.500;  %sec
             
             % write instruction for test phase
-            str=sprintf(' by pressing %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
-            instruction = ['In the test phase, you will be shown images again.\n Your task will be to indicate if the image has already been presented in the study phase (old image) or if it''s a new image' str 'Click to begin'];
+            str=sprintf(' Press %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
+            instruction = ['In the test phase, you will be shown images again.\n Your task will be to indicate if the image has already been presented in the study phase (old image) or if it is a new image\n' str 'Click to begin'];
             DrawFormattedText(w, instruction, 'center', 'center', textcolor);
-            ntrials = 20; % 5 new 5 old
+            ntrials = 20; % because 10 new and 10 old
             
             conditions = [repmat(1,1, number_old), repmat(2,1,ntrials-number_old)]; % 10 old images and 10 new images! 50% probability
             rng('default');
@@ -254,6 +251,13 @@ data = struct; % create a structure to store all our variables in
                         break;
                     end
                 end
+             % 'q' key quits the experiment during phase 2
+              if KeyCode(escape) == 1
+                  clear all
+                  close all
+                  sca
+                  return;
+              end
             end
             
             Screen('FillRect',w, bgcolor, rect);
@@ -270,7 +274,7 @@ data = struct; % create a structure to store all our variables in
                 data.rt = endrt - startrt;
                 response(trial) = find(KeyCode==1);
                 data.response = [data.response, response(trial)]; %add the keypress response to data.response
-                fprintf(1, 'You responded with "%s"\n', response(trial))
+                fprintf(1, 'You responded with "%s"\n', response(trial)) % shows key press for debugging purposes
                 Screen('Flip', w);
                 
                 
@@ -303,7 +307,8 @@ data = struct; % create a structure to store all our variables in
                 data.accuracy = [data.accuracy, accuracy]; %add the accuracy to the data.accuracy. 1=correct 0=incorrect
                 data.rt = [data.rt, rt];
                 
-                save('test.mat', 'trial','data');
+               
+                save('data.mat','data'); % saves data structure
                 
                 
                  resp=KbName(KeyCode); % get key pressed by subject (e.g:instead of 68, we get D. and 75, K.)
@@ -330,17 +335,17 @@ data = struct; % create a structure to store all our variables in
     DrawFormattedText(w, 'Experiment Finished \n\n Press Any Key To Exit',...
         'center', 'center', textcolor);
     Screen('Flip', w);
-    KbStrokeWait;
-    sca;
     % End of experiment screen. We clear the screen once they have made their
     % response
+    KbStrokeWait;
+    sca;
+
     
-    save(datafilename); %save our data structure
     
     return;
 catch
     % catch error: This is executed in case something goes wrong in the
-    % 'try' part due to programming error etc.:
+    % 'try' part due to programming error etc.: Useful for psych experiments
     
     % Do same cleanup as at the end of a regular session...
     Screen('Close',w)
@@ -348,6 +353,6 @@ catch
     fclose('all');
     Priority(0);
     
-    % Output the error message that describes the error:
+    % Output the error message that describes the error in the command window:
     psychrethrow(psychlasterror);
 end % try ... catch %
