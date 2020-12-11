@@ -60,6 +60,8 @@ newresp=KbName('k');                                                            
 %   File Handling
 %-------------------------
 
+% Get subject's initials (prompt to get the pID before the start of the experiment)
+pID = input('Enter your initials: ','s');
 % Create directory and initial data file
 resultsFolder = fullfile('SubjectData', pID);                                                                   % Creates a SubjectData folder to store files.
 if ~exist(resultsFolder,'dir')
