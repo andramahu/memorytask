@@ -147,9 +147,9 @@ try
     rectRect = [x1 y1 x2 y2];
     
     % Draw text to the screen
-    DrawFormattedText(w,'Welcome to our experiment! Press any key to begin.','center','center', textcolor)       % Introduction message.
-    Screen('Flip', w);                                                                                           % Flip to screen.
-    KbWait;                                                                                                      % Wait for keypress.
+    DrawFormattedText(w,'Welcome to our experiment! Press any key to begin.','center','center', textcolor)         % Introduction message.
+    Screen('Flip', w);                                                                                             % Flip to screen.
+    KbWait;                                                                                                        % Wait for keypress.
     
     % Dummy calls to GetSecs, WaitSecs, KbCheck to make sure
     % They are loaded and ready without delays -- good practice for experiments used in research.
@@ -161,18 +161,18 @@ try
     Priority(priorityLevel);
     
     %% Run through study and test phase
-    for phase=1:2                                                                                               % 1 is study phase, 2 is test phase.
+    for phase=1:2                                                                                                 % 1 is study phase, 2 is test phase.
         
         % Setup experiment variables etc. depending on phase:
-        if phase==1                                                                                             % Study phase.
+        if phase==1                                                                                               % Study phase.
             
             phasename='study';
             duration=0.500;
             DrawFormattedText(w, 'In this study phase, you will have to memorize the following images.\n Click to begin', 'center', 'center', textcolor);
-            ntrials = phase1;                                                                                   % 25.
+            ntrials = phase1;                                                                                     % 25.
             
             
-        else                                                                                                    % Test phase.
+        else                                                                                                      % Test phase.
             
             phasename='test';
             duration=0.500;
@@ -181,11 +181,11 @@ try
             str=sprintf(' Press %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
             instruction = ['In the test phase, you will be shown images again.\n Your task will be to indicate if the image has already been presented in the study phase (old image) or if it is a new image\n' str 'Click to begin'];
             DrawFormattedText(w, instruction, 'center', 'center', textcolor);
-            ntrials = 20;                                                                                       % 10 new and 10 old.
+            ntrials = 20;                                                                                         % 10 new and 10 old.
             
-            conditions = [repmat(1,1, number_old), repmat(2,1,ntrials-number_old)];                             % 10 old images and 10 new images! 50% probability.
+            conditions = [repmat(1,1, number_old), repmat(2,1,ntrials-number_old)];                               % 10 old images and 10 new images! 50% probability.
             rng('default');
-            conditionsrand = conditions(randperm(length(conditions)));                                          % This will randomize the order of new and old images.
+            conditionsrand = conditions(randperm(length(conditions)));                                            % This will randomize the order of new and old images.
         end
         
         
@@ -208,7 +208,7 @@ try
         for trial = 1:ntrials
             
             if (phase == 1)
-                filenumber = img_phase1(trial);                                                                 % imgname by itself (e.g: S1.png).
+                filenumber = img_phase1(trial);                                                                   % imgname by itself (e.g: S1.png).
                 
                 % Fixation cross between each trial
                 
@@ -216,16 +216,16 @@ try
                 Screen('Flip',w);
                 WaitSecs(0.500);
                 
-                ifi = Screen ( 'GetFlipInterval' , w);                                                          % Query the frame duration.
+                ifi = Screen ( 'GetFlipInterval' , w);                                                            % Query the frame duration.
                 
-                Screen('BlendFunction', w, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');                           % Set the blend funciton for the screen.
-            else                                                                                                % If phase == 2.
-                filenumber = img_p2(trial);                                                                     % filenumber of images in phase 2 for each trial.
+                Screen('BlendFunction', w, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');                             % Set the blend funciton for the screen.
+            else                                                                                                  % If phase == 2.
+                filenumber = img_p2(trial);                                                                       % filenumber of images in phase 2 for each trial.
                 
                 % For old images:
                 if conditionsrand(trial) == 1
                     count1 = count1 + 1;
-                    filenumber = img_old(count1);                                                               % Gives image name by itself (e.g: S1.png).
+                    filenumber = img_old(count1);                                                                 % Gives image name by itself (e.g: S1.png).
                     imgtype = 1;
                     
                 % For new images:
@@ -238,10 +238,10 @@ try
                 
                 
             end
-            fullFileName = fullfile('images', imgname{filenumber});                                            % Goes inside the images folder and gets all the images.
-            fprintf(1, 'now reading images %d\n', imgname{filenumber})                                         % For debugging purposes in the command window.
-            imageArray = imread(fullFileName);                                                                 % Read the images.
-            ResizeImg = imresize(imageArray, 0.2);                                                             % Resize the images.
+            fullFileName = fullfile('images', imgname{filenumber});                                              % Goes inside the images folder and gets all the images.
+            fprintf(1, 'now reading images %d\n', imgname{filenumber})                                           % For debugging purposes in the command window.
+            imageArray = imread(fullFileName);                                                                   % Read the images.
+            ResizeImg = imresize(imageArray, 0.2);                                                               % Resize the images.
             
             TextureIndex = Screen('MakeTexture', w, ResizeImg);
             
@@ -254,14 +254,14 @@ try
             [VBLTimestamp, startrt]=Screen('Flip', w);
             
             while (GetSecs - startrt)<=duration
-                                                                                                               % During test phase, subjects can respond before stimulus terminates.
+                                                                                                                 % During test phase, subjects can respond before stimulus terminates.
                 if ( phase == 2 )
                     [KeyIsDown, endrt, KeyCode]=KbCheck;
-                    if ( KeyCode(oldresp)==1 || KeyCode(newresp)==1 )                                          % If d or k is pressed.
+                    if ( KeyCode(oldresp)==1 || KeyCode(newresp)==1 )                                            % If d or k is pressed.
                         break;
                     end
                 end
-                                                                                                               % 'q' key quits the experiment during phase 2
+                                                                                                                 % 'q' key quits the experiment during phase 2
                 if KeyCode(escape) == 1
                     clear all
                     close all
@@ -284,8 +284,8 @@ try
                 end
                 data.rt = endrt - startrt;
                 response(trial) = find(KeyCode==1);
-                data.response = [data.response, response(trial)];                                              % Add the keypress response to data.response.
-                fprintf(1, 'You responded with "%s"\n', response(trial))                                       % Shows key press for debugging purposes.
+                data.response = [data.response, response(trial)];                                                % Add the keypress response to data.response.
+                fprintf(1, 'You responded with "%s"\n', response(trial))                                         % Shows key press for debugging purposes.
                 Screen('Flip', w);
                 
                 
@@ -298,61 +298,61 @@ try
                     accuracy=1;
                 else
                     accuracy=0; 
-                                                                                                               % Code correct if oldresp with old image.
-                                                                                                               % Newresp with new image or study phase.
+                                                                                                                 % Code correct if oldresp with old image.
+                                                                                                                 % Newresp with new image or study phase.
                                                                                                         
                     if ((KeyCode(oldresp)==1 && conditionsrand(trial)==1) || (KeyCode(newresp)==1 && conditionsrand(trial)==2))
-                        accuracy=1;                                                                            % Correct, true.
-                        Screen('FillRect',w, colRectTrue, rectRect);                                           % Green feedback square for correct answer.
+                        accuracy=1;                                                                              % Correct, true.
+                        Screen('FillRect',w, colRectTrue, rectRect);                                             % Green feedback square for correct answer.
                         Screen('Flip',w);
                         WaitSecs(0.5);
-                    else                                                                                       % If person answers incorrectly.
-                        Screen('FillRect',w, colRectFalse, rectRect);                                          % Red feedback square for incorrect answer.
+                    else                                                                                         % If person answers incorrectly.
+                        Screen('FillRect',w, colRectFalse, rectRect);                                            % Red feedback square for incorrect answer.
                         Screen('Flip',w);
                         WaitSecs(0.5);
                     end
                     
                     
                 end
-                data.accuracy = [data.accuracy, accuracy];                                                     % Add the accuracy to the data.accuracy. 1=correct 0=incorrect.
+                data.accuracy = [data.accuracy, accuracy];                                                       % Add the accuracy to the data.accuracy. 1=correct 0=incorrect.
                 data.rt = [data.rt, rt];
                 
                 
-                save('data.mat','data');                                                                       % Saves data structure.
+                save('data.mat','data');                                                                         % Saves data structure.
                 
                 
-                resp=KbName(KeyCode);                                                                          % Get key pressed by subject (e.g:instead of 68, we get D. and 75, K.).
+                resp=KbName(KeyCode);                                                                            % Get key pressed by subject (e.g:instead of 68, we get D. and 75, K.).
                 
                 % Write trial result to file:
                 fprintf(outfile,'%s %s %i %s %i %s %i %i %i\n', ...
-                    pID, ...
-                    phasename, ...                                                                             % Will be test phase.
-                    trial, ...                                                                                 % 1 to 20.
-                    resp, ...                                                                                  % d or k.
-                    img_p2(trial), ...                                                                         % Number of the image (e.g 12).
-                    imgname{img_p2(trial)}, ...                                                                % Name of image at that specific trial in phase 2 (e.g S12.png).
-                    imgtype, ...                                                                               % 1=old  2=new.
-                    accuracy, ...                                                                              % 1 = correct 0 = incorrect.
+                    pID, ...                                                        
+                    phasename, ...                                                                               % Will be test phase.
+                    trial, ...                                                                                   % 1 to 20.
+                    resp, ...                                                                                    % d or k.
+                    img_p2(trial), ...                                                                           % Number of the image (e.g 12).
+                    imgname{img_p2(trial)}, ...                                                                  % Name of image at that specific trial in phase 2 (e.g S12.png).
+                    imgtype, ...                                                                                 % 1=old  2=new.
+                    accuracy, ...                                                                                % 1 = correct 0 = incorrect.
                     rt);
                 
-            end                                                                                                % If phase==2 loop.
+            end                                                                                                  % If phase==2 loop.
             
-        end                                                                                                    % For trial loop.
+        end                                                                                                      % For trial loop.
         
-    end                                                                                                        % For phase 1:2 loop.
+    end                                                                                                          % For phase 1:2 loop.
     
     % End of experiment screen. We clear the screen once they have made their response
-    WaitSecs(0.5);                                                                                             % Wait after last feedback before seeing the exit screen.
+    WaitSecs(0.5);                                                                                               % Wait after last feedback before seeing the exit screen.
     DrawFormattedText(w, 'Experiment Finished \n\n Press Any Key To Exit',...
         'center', 'center', textcolor);
-    Screen('Flip', w);                                                                                         % End of experiment screen. We clear the screen once they have made their response.
+    Screen('Flip', w);                                                                                           % End of experiment screen. We clear the screen once they have made their response.
     KbStrokeWait;
     sca;
     
     
     
     return;
-catch                                                                                                          % Catch error: This is executed in case something goes wrong in the 'try' part due to programming error etc.: Useful for psych experiments.
+catch                                                                                                            % Catch error: This is executed in case something goes wrong in the 'try' part due to programming error etc.: Useful for psych experiments.
     
     % Do same cleanup as at the end of a regular session...
     Screen('Close',w)
@@ -362,4 +362,4 @@ catch                                                                           
     
     % Output the error message that describes the error in the command window:
     psychrethrow(psychlasterror);
-end                                                                                                            % Try ... catch.
+end                                                                                                              % Try ... catch.
