@@ -6,7 +6,7 @@ function OldNewExptest(pID)
 % STUDY PHASE: Participant will be shown 25 random images and be told to memorize them.
 % TEST  PHASE: Participant will be shown 20 images and have to decide whether the image is old('d') or new('k') with a keypress.
 % 10 will be old images, 10 will be new images
-% Results for each participant will be saved as OldNewExp_pID.dat,
+% Results for each participant will be saved as OldNew_pID.dat,
 % respectively.
 % If you wish to escape the experiment, press 'q' during phase 2.
 %
@@ -62,6 +62,7 @@ newresp=KbName('k');                                                            
 
 % Get subject's initials (prompt to get the pID before the start of the experiment)
 pID = input('Enter your initials: ','s');
+
 % Create directory and initial data file
 resultsFolder = fullfile('SubjectData', pID);                                                                   % Creates a SubjectData folder to store files.
 if ~exist(resultsFolder,'dir')
@@ -71,24 +72,21 @@ end
 datafilename = strcat([resultsFolder '/OldNewExp_',pID,'.dat']);
 
 overwriting = true; 
-if exist(datafilename, 'file')
-  % Asks if they want to overwrite their data file.
-  Message = sprintf('Oops!Result file already exists:\n%s\n Do you wish to overwrite it?', datafilename);
+if exist(datafilename, 'file') 
+  Message = sprintf('Oops!Result file already exists:\n%s\n Do you wish to overwrite it?', datafilename);       % Asks if they want to overwrite their data file.
   Dialog = 'File exists';
   buttonText = questdlg(Message, 'Dialog', 'Yes', 'No', 'Yes');
-  if strcmpi(buttonText, 'No')
-    % User chooses to not overwrite the file:
+  if strcmpi(buttonText, 'No')                                                                                  % User chooses to not overwrite the file.
     overwriting = false;
     fprintf('You decided to not overwrite your file. Alright then, keep your secrets.\n');
   end
 end
-if overwriting
-  % if user wants to overwrite an existing file, or if it doesn't exist yet.
-  delete(datafilename);                                                                                         % if user wants to overwrite an existing file
-  outfile = fopen(datafilename,'wt');                                                                           % open file for writing
+if overwriting                                                                                                  % If user wants to overwrite an existing file, or if it doesn't exist yet.
+  delete(datafilename);                                                                                         % If user wants to overwrite an existing file.
+  outfile = fopen(datafilename,'wt');                                                                           % Open file for writing.
 end
 
-fprintf(outfile, 'pID\t phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n');     % add headers to the table at the end
+fprintf(outfile, 'pID\t phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n');     % Add headers to the table at the end
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
