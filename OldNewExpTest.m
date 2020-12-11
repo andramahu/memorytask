@@ -13,13 +13,13 @@ function OldNewExptest(pID)
 %
 % You will need functions from the Psychtoolbox (http://psychtoolbox.org) to run this function.
 %
-% Thara Boumekla, 11/12/2020
-% thara.boumekla@umontreal.ca
+% Thara Boumekla, Andra Mahu 11/12/2020
+% thara.boumekla@umontreal.ca, andra.mihaela.mahu@umontreal.ca
 %
 %
 %
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              Preliminary parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -36,17 +36,17 @@ rand('state',sum(100*clock)); % Reseed the random-number generator for each expt
 % delays in the critical reaction time measurement
 [KeyIsDown, endrt, KeyCode]=KbCheck; % useful for experiments that actually will be used in a research experiment.
 
-  %-------------------------  
-  %   Color parameters
-  %-------------------------
+%-------------------------
+%   Color parameters
+%-------------------------
 white = [ 255 255 255];
 black = [ 0 0 0];
 bgcolor = black; textcolor = white;
 green = [0 255 0]; red = [255 0 0];
 
-  %-------------------------  
-  %   keyboard parameters
-  %-------------------------
+%-------------------------
+%   keyboard parameters
+%-------------------------
 % Make sure keyboard mapping is the same on all supported operating systems
 KbName('UnifyKeyNames');
 % set up our keys
@@ -55,77 +55,77 @@ oldresp=KbName('d'); % "old" response via key 'd'
 newresp=KbName('k'); % "new" response via key 'k'
 %KbName('d') = 68
 %KbName('k') = 75
-  %-------------------------  
-  %   File Handling
-  %-------------------------
+%-------------------------
+%   File Handling
+%-------------------------
 
 % Define filenames of input files and result file:
 
 pID = input('Enter your initials: ','s');
 datafilename = strcat('OldNew_',pID,'.mat');  % name of data file to write to
 outfile = fopen('xdata.dat','wt'); % Puts results in a nice table at the end
-fprintf(outfile, 'phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n'); % add headers 
+fprintf(outfile, 'phasename\t trial\t resp\t imageNumber\t ImageName\t ImageType\t accuracy\t rt\n'); % add headers
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                        Initializing data variables
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 try
-% -------------info--------------------
-% img_phase1 = randomly picks 25 random images from those 51 for phase 1 (per trial)
-% img_old = randomly selects 10 of those 25 seen images from phase 1 for
-% phase 2. These will be our old images!
-% img_new = 10 images (from those 51) that are not included in img_phase1.
-%--------------------------------------
-allimages = dir('**/*.png'); % directory of our images
-imgname = {allimages.name}; % puts image names into a cell array
-imgnumber = length(imgname); % counts total number of images 
-all_img = [1:length(imgname)];
-
-
-% IMAGES FOR PHASE 1
-img_phase1 = randperm(imgnumber,25); % select 25 random images from those 51 
-phase1 = length(img_phase1);
-
-% IMAGES FOR PHASE 2
-indexes10 = randperm(length(img_phase1),10); % select 10 random images from those 25 to present in phase 2 as old images
-img_old = img_phase1(indexes10); % selects 10 from img_phase1
-number_old = length(img_old); % need this for the conditions in phase 2
-%img_new ~= img_phase1; % BECAUSE WE DON'T WANT ANY OF THOSE 25 SEEN!
-%10 different images from 26 new in total and these are random because img_phase1 is randomized
-img_new = find(~ismember(all_img,img_phase1),10); 
-
-img_p2 = [img_old,img_new]; % array of all images for phase 2 (for fprintf later)
-
-data = struct; % create a structure to store all our variables in
+    % -------------info--------------------
+    % img_phase1 = randomly picks 25 random images from those 51 for phase 1 (per trial)
+    % img_old = randomly selects 10 of those 25 seen images from phase 1 for
+    % phase 2. These will be our old images!
+    % img_new = 10 images (from those 51) that are not included in img_phase1.
+    %--------------------------------------
+    allimages = dir('**/*.png'); % directory of our images
+    imgname = {allimages.name}; % puts image names into a cell array
+    imgnumber = length(imgname); % counts total number of images
+    all_img = [1:length(imgname)];
+    
+    
+    % IMAGES FOR PHASE 1
+    img_phase1 = randperm(imgnumber,25); % select 25 random images from those 51
+    phase1 = length(img_phase1);
+    
+    % IMAGES FOR PHASE 2
+    indexes10 = randperm(length(img_phase1),10); % select 10 random images from those 25 to present in phase 2 as old images
+    img_old = img_phase1(indexes10); % selects 10 from img_phase1
+    number_old = length(img_old); % need this for the conditions in phase 2
+    %img_new ~= img_phase1; % BECAUSE WE DON'T WANT ANY OF THOSE 25 SEEN!
+    %10 different images from 26 new in total and these are random because img_phase1 is randomized
+    img_new = find(~ismember(all_img,img_phase1),10);
+    
+    img_p2 = [img_old,img_new]; % array of all images for phase 2 (for fprintf later)
+    
+    data = struct; % create a structure to store all our variables in
     data.accuracy = [];
     data.rt = []; % will contain the reaction time for each trial
     data.response = []; % will contain the answer of each participant . 'd' means old, 'k' means new.
     data.pID = pID; % inputs pID in a data structure
     
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%                
-%                               Setting screen up
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Get screenNumber of stimulation display
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %                               Setting screen up
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Get screenNumber of stimulation display
     screens=Screen('Screens');
     screenNumber=max(screens);
- 
+    
     [w, rect] = Screen('OpenWindow',screenNumber, bgcolor); % Open an on screen window
     
     HideCursor; % Hide the mouse cursor
     
     [xCenter,yCenter] = RectCenter(rect); % get the centre coordinates of your window
     
-  %-------------------------  
-  %          Text
-  %-------------------------
-% Set the text size
-Screen('TextSize',w,45) 
-% Set the text to BOLD
-Screen('TextStyle',w,1)
+    %-------------------------
+    %          Text
+    %-------------------------
+    % Set the text size
+    Screen('TextSize',w,45)
+    % Set the text to BOLD
+    Screen('TextStyle',w,1)
     
-  %-------------------------  
-  %      Fixation cross
-  %-------------------------
+    %-------------------------
+    %      Fixation cross
+    %-------------------------
     % Get the fixation cross to appear between trials (images)
     fixCrossDimension = 20;
     lineWidthDimension = 2;
@@ -140,7 +140,7 @@ Screen('TextStyle',w,1)
     colRectTrue = green;
     colRectFalse = red;
     rectRect = [x1 y1 x2 y2];
-
+    
     % Draw text to the screen
     DrawFormattedText(w,'Welcome to our experiment! Press any key to begin.','center','center', textcolor) % Introduction message
     Screen('Flip', w); % flip to screen
@@ -149,13 +149,13 @@ Screen('TextStyle',w,1)
     % dummy calls to GetSecs, WaitSecs, KbCheck to make sure
     % they are loaded and ready without delays -- good practice for experiments used in research.
     KbCheck;
-    GetSecs;  
+    GetSecs;
     
     % Set priority for script execution to realtime priority:
     priorityLevel=MaxPriority(w);
     Priority(priorityLevel);
     
- %% run through study and test phase
+    %% run through study and test phase
     for phase=1:2 % 1 is study phase, 2 is test phase
         
         % Setup experiment variables etc. depending on phase:
@@ -192,38 +192,38 @@ Screen('TextStyle',w,1)
         
         % Wait a bit before starting trial
         WaitSecs(0.500);
-%----------------------------------------------------------------------
-%                           Trial loop
-%----------------------------------------------------------------------
+        %----------------------------------------------------------------------
+        %                           Trial loop
+        %----------------------------------------------------------------------
         count1= 0;
         count2= 0;
         for trial = 1:ntrials
-      
+            
             if (phase == 1)
                 filenumber = img_phase1(trial); % imgname by itself (e.g: S1.png)
-            
-            % Fixation cross between each trial
-            
-            Screen ('DrawLines' , w, allCoords, [lineWidthDimension], [white], [xCenter yCenter]);
-            Screen('Flip',w);
-            WaitSecs(0.500);
-            
-            ifi = Screen ( 'GetFlipInterval' , w); % Query the frame duration
-            
-            Screen('BlendFunction', w, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');  % Set the blend funciton for the screen
+                
+                % Fixation cross between each trial
+                
+                Screen ('DrawLines' , w, allCoords, [lineWidthDimension], [white], [xCenter yCenter]);
+                Screen('Flip',w);
+                WaitSecs(0.500);
+                
+                ifi = Screen ( 'GetFlipInterval' , w); % Query the frame duration
+                
+                Screen('BlendFunction', w, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');  % Set the blend funciton for the screen
             else % if phase == 2
                 filenumber = img_p2(trial); % filenumber of images in phase 2 for each trial
                 
                 % for old images:
-                if conditionsrand(trial) == 1  
+                if conditionsrand(trial) == 1
                     count1 = count1 + 1;
                     filenumber = img_old(count1); % gives image name by itself (e.g: S1.png)
                     imgtype = 1;
                     
-                 % for new images:
+                    % for new images:
                 elseif conditionsrand(trial) == 2
                     count2 = count2 + 1;
-                    filenumber = img_new(count2); 
+                    filenumber = img_new(count2);
                     imgtype = 2;
                     
                 end
@@ -234,8 +234,8 @@ Screen('TextStyle',w,1)
             fprintf(1, 'now reading images %d\n', imgname{filenumber}) % for debugging purposes in the command window
             imageArray = imread(fullFileName); % read the images
             ResizeImg = imresize(imageArray, 0.2); % resize the images
-         
-            TextureIndex = Screen('MakeTexture', w, ResizeImg); 
+            
+            TextureIndex = Screen('MakeTexture', w, ResizeImg);
             
             % Draw texture image to backbuffer centered in the middle
             Screen('DrawTexture', w, TextureIndex);
@@ -254,13 +254,13 @@ Screen('TextStyle',w,1)
                         break;
                     end
                 end
-             % 'q' key quits the experiment during phase 2
-              if KeyCode(escape) == 1
-                  clear all
-                  close all
-                  sca
-                  return;
-              end
+                % 'q' key quits the experiment during phase 2
+                if KeyCode(escape) == 1
+                    clear all
+                    close all
+                    sca
+                    return;
+                end
             end
             
             Screen('FillRect',w, bgcolor, rect);
@@ -297,12 +297,12 @@ Screen('TextStyle',w,1)
                         accuracy=1; %correct, true
                         Screen('FillRect',w, colRectTrue, rectRect); % Green feedback square for correct answer
                         Screen('Flip',w);
-                        WaitSecs(0.5); 
+                        WaitSecs(0.5);
                     else % if person answers incorrectly
                         %ac=0; %incorrect, false
                         Screen('FillRect',w, colRectFalse, rectRect); % Red feedback square for incorrect answer
                         Screen('Flip',w);
-                        WaitSecs(0.5); 
+                        WaitSecs(0.5);
                     end
                     
                     
@@ -310,27 +310,27 @@ Screen('TextStyle',w,1)
                 data.accuracy = [data.accuracy, accuracy]; %add the accuracy to the data.accuracy. 1=correct 0=incorrect
                 data.rt = [data.rt, rt];
                 
-               
+                
                 save('data.mat','data'); % saves data structure
                 
                 
-                 resp=KbName(KeyCode); % get key pressed by subject (e.g:instead of 68, we get D. and 75, K.)
-               
-             % Write trial result to file:
-            fprintf(outfile,'%s %i %s %i %s %i %i %i\n', ...
-                phasename, ... % will be test phase
-                trial, ... % 1 to 20
-                resp, ... % d or k
-                img_p2(trial), ... %number of the image (e.g 12)
-                imgname{img_p2(trial)}, ... % name of image at that specific trial in phase 2 (e.g S12.png)
-                imgtype, ... % 1=old  2=new
-                accuracy, ... % 1 = correct 0 = incorrect
-                rt);
+                resp=KbName(KeyCode); % get key pressed by subject (e.g:instead of 68, we get D. and 75, K.)
+                
+                % Write trial result to file:
+                fprintf(outfile,'%s %i %s %i %s %i %i %i\n', ...
+                    phasename, ... % will be test phase
+                    trial, ... % 1 to 20
+                    resp, ... % d or k
+                    img_p2(trial), ... %number of the image (e.g 12)
+                    imgname{img_p2(trial)}, ... % name of image at that specific trial in phase 2 (e.g S12.png)
+                    imgtype, ... % 1=old  2=new
+                    accuracy, ... % 1 = correct 0 = incorrect
+                    rt);
                 
             end %if phase==2 loop
             
         end %for trial loop
-
+        
     end %for phase 1:2 loop
     % End of experiment screen. We clear the screen once they have made their
     % response
@@ -342,7 +342,7 @@ Screen('TextStyle',w,1)
     % response
     KbStrokeWait;
     sca;
-
+    
     
     
     return;
