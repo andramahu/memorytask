@@ -169,7 +169,7 @@ try
             phasename='study';
             duration=0.500;
             DrawFormattedText(w, 'In this study phase, you will have to memorize the following images.\n Click to begin', 'center', 'center', textcolor);
-            ntrials = phase1;                                                                                   % 25
+            ntrials = phase1;                                                                                   % 25.
             
             
         else                                                                                                    % Test phase.
@@ -362,4 +362,4 @@ catch                                                                           
     
     % Output the error message that describes the error in the command window:
     psychrethrow(psychlasterror);
-end                                                                                                           % Try ... catch.
+end                                                                                                            % Try ... catch.
