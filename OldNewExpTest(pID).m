@@ -43,7 +43,7 @@ green = [0 255 0]; red = [255 0 0];
 % Make sure keyboard mapping is the same on all supported operating systems
 KbName('UnifyKeyNames');
 % set up our keys
-escKey = KbName('q');
+escape = KbName('q');
 oldresp=KbName('d'); % "old" response via key 'd'
 newresp=KbName('k'); % "new" response via key 'k'
 %KbName('d') = 68
