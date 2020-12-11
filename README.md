@@ -16,3 +16,6 @@ Reaction time implemented in Phase 2:
 - Stopwatch starts when the image is presented.
 - Stopwatch stops when the participant answers by pressing a key.
 - Calculated for all 20 images presented.
+
+Saving data with fprintf
+- Results can be found in the SubjectData folder that should be automatically created when you first run the code.
