@@ -276,7 +276,7 @@ try
             while (GetSecs - startrt)<=duration                                                                 % During test phase, subjects can respond before stimulus terminates.
                 if ( phase == 1 )
                     [keyIsDown, secs, keyCode] = KbCheck;
-                    if keyCode(escape)
+                    if keyCode(escape)                                                                          % 'q' key quits the experiment during phase 1.
                         clear all
                         sca;
                         return
@@ -286,7 +286,7 @@ try
                     [KeyIsDown, endrt, KeyCode]=KbCheck;
                     if ( KeyCode(oldresp)==1 || KeyCode(newresp)==1 )                                            % If d or k is pressed.
                         break;
-                    elseif KeyCode(escape) == 1                                                                  % 'q' key quits the experiment during phase 2
+                    elseif KeyCode(escape) == 1                                                                  % If 'q' is pressed, it exits the experiment.
                         clear all
                         sca
                         return;
