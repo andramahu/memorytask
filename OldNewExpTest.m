@@ -273,14 +273,15 @@ try
             % and record stimulus onset time in 'startrt':
             [VBLTimestamp, startrt]=Screen('Flip', w);
             
-            while (GetSecs - startrt)<=duration
-                 if ( phase == 1 )
+            while (GetSecs - startrt)<=duration                                                                 % During test phase, subjects can respond before stimulus terminates.
+                if ( phase == 1 )
                     [keyIsDown, secs, keyCode] = KbCheck;
                     if keyCode(escape)
                         clear all
                         sca;
                         return
-                    end                                                                                          % During test phase, subjects can respond before stimulus terminates.
+                    end
+                end                                                                                          
                 if ( phase == 2 )
                     [KeyIsDown, endrt, KeyCode]=KbCheck;
                     if ( KeyCode(oldresp)==1 || KeyCode(newresp)==1 )                                            % If d or k is pressed.
@@ -291,7 +292,7 @@ try
                         return;
                     end
                 end
-             end
+            end
             
             Screen('FillRect',w, bgcolor, rect);
             Screen('Flip', w);
