@@ -375,18 +375,14 @@ try
         'center', 'center', textcolor);
     Screen('Flip', w);                                                                                           % End of experiment screen. We clear the screen once they have made their response.
     KbStrokeWait;
-    sca;
-    
-    
-    
-    return;
-catch                                                                                                            % Catch error: This is executed in case something goes wrong in the 'try' part due to programming error etc.: Useful for psych experiments.
-    
-    % Do same cleanup as at the end of a regular session...
     Screen('Close',w)
     fclose('all');
     Priority(0);
     
+    
+    return;
+catch                                                                                                            % Catch error: This is executed in case something goes wrong in the 'try' part due to programming error etc.: Useful for psych experiments.
+    Screen('Close',w)                                                                                            % in case of an error, catch it and close the screen.
     % Output the error message that describes the error in the command window:
     psychrethrow(psychlasterror);
-end                                                                                                              % Try ... catch.
+end                                                                                                              % end of Try ... catch.
