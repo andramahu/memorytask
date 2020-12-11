@@ -281,16 +281,14 @@ try
                     [KeyIsDown, endrt, KeyCode]=KbCheck;
                     if ( KeyCode(oldresp)==1 || KeyCode(newresp)==1 )                                            % If d or k is pressed.
                         break;
+                    elseif KeyCode(escape) == 1                                                                  % 'q' key quits the experiment during phase 2
+                        clear all
+                        close all
+                        sca
+                        return;
                     end
                 end
-                                                                                                                 % 'q' key quits the experiment during phase 2
-                if KeyCode(escape) == 1
-                    clear all
-                    close all
-                    sca
-                    return;
-                end
-            end
+             end
             
             Screen('FillRect',w, bgcolor, rect);
             Screen('Flip', w);
