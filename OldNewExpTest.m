@@ -1,23 +1,27 @@
 function OldNewExptest(pID)
-
-% Input parameters:
+% Presented to Simon Faghel-Soubeyrand as a final project for class
+% PSY2038-Programmation en neuroscience cognitive.
+% This is a visual experiment useful for short term memory tasks where the subject is expected to make a response
+% to images presented. In a real research setting, there would be more images and timing delays would be critical.
 %
+% Input parameters:
 % pID:   run and input your initials (E.g: AMM, TB...)
 % STUDY PHASE: Participant will be shown 25 random images and be told to memorize them.
 % TEST  PHASE: Participant will be shown 20 images and have to decide whether the image is old('d') or new('k') with a keypress.
 % 10 will be old images, 10 will be new images
-% If you wish to escape the experiment, press 'q'.
+% If you wish to escape the experiment at any time, press 'q'.
 %
-% Results get saved inside the SubjectData folder within a pID folder as OldNewExp_pID.dat . You can verify your results there.
+% Results get saved inside the SubjectData folder within a pID folder as OldNewExp_pID.dat .
+% You can verify your results there.
 %
-% You will need functions from the Psychtoolbox (http://psychtoolbox.org) to run this function.
+% Thara Boumekla, 11/12/2020, thara.boumekla@umontreal.ca 
+% Andra Mahu, 11/12/2020, andra.mihaela.mahu@umontreal.ca
 %
-% Thara Boumekla, 11/12/2020
-% thara.boumekla@umontreal.ca 
-%
-% Andra Mahu, 11/12/2020
-% andra.mihaela.mahu@umontreal.ca
-
+% This function requires one input (pID) to create
+% and save a data matrix file per participant containing all collected information during phase 2
+% useful for further analysis such as the trial number, the phase name, the images presented, their response,
+% the accuracy and the reaction time for each trial.
+% Psychtoolbox needs to be downloaded to the Matlab environment as this code uses its functions.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %                              Preliminary parameters
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
