@@ -203,7 +203,7 @@ try
             
             % write instruction for test phase
             str=sprintf(' Press %s for OLD and %s for NEW\n',KbName(oldresp),KbName(newresp));
-            instruction = ['In the test phase, you will be shown images again.\n Your task will be to indicate if the image has already been presented in the study phase (old image) or if it is a new image\n' str 'Click to begin'];
+            instruction = ['In the test phase, you will be shown images again.\n Your task will be to indicate if the image has already been presented\n in the study phase (old image) or if it is a new image\n' str 'Click to begin'];
             DrawFormattedText(w, instruction, 'center', 'center', textcolor);
             ntrials = 20;                                                                                         % 10 new and 10 old.
             
